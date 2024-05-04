@@ -12,7 +12,7 @@ export interface IHeader {
 
 const Header: React.FC<IHeader> = ({ activePage }) => {
   return (
-    <Grid className="pb-2 pt-4 px-8 z-10 border-b border-secondary shadow-md">
+    <Grid className="pb-2 pt-4 px-12 z-10 border-b border-secondary shadow-md">
       <Grid.Col span={4} className="">
         <Group className="gap-3">
           <div className="w-10">
