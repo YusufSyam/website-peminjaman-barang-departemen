@@ -17,6 +17,8 @@ export default {
       "light-red": "#ea4d4a",
       "orange": "#FF8A08",
       "yellow": "#FFC100",
+      "green": "#03873f",
+      "light-green": "#12c865",
       "primary-text": "#334155",
       "secondary-text": "#808fa4"
     },

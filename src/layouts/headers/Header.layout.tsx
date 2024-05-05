@@ -16,14 +16,14 @@ const Header: React.FC<IHeader> = ({ activePage }) => {
       <Grid.Col span={4} className="">
         <Group className="gap-3">
           <div className="w-10">
-            <img src={unhasLogo} alt="" />
+            <img src={unhasLogo} alt="Logo Unhas" />
           </div>
           <Stack className="gap-0">
             <Text className="font-poppins-semibold text-lg text-start text-primary-text">
               Peminjaman Inventaris Departemen
             </Text>
             <Text className="text-start text-sm text-secondary-text -mt-1">
-              Dep. Matematika, Fak. MIPA, Universitas Hasanuddin
+              Dep. Matematika, Fak. MIPA | Universitas Hasanuddin
             </Text>
           </Stack>
         </Group>
