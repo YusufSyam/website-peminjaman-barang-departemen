@@ -16,9 +16,9 @@ const CatalogItem: React.FC<ICatalogItem> = ({
   const isAvailable = stock > 0;
 
   return (
-    <Stack className="mb-8 w-full border border-secondary rounded-md overflow-hidden gap-0 shadow-xl hover:-translate-y-1 transition-all duration-500">
-      <div className="w-full h-[200px] object-contain rounded-t-md overflow-hidden">
-        <img src={image} alt="Gambar Item" />
+    <Stack className="mb-8 w-full border border-secondary rounded-md overflow-hidden gap-0 shadow-xl">
+      <div className="w-full h-[200px] rounded-t-md overflow-hidden">
+        <img src={image} alt="Gambar Item" className="w-full h-full object-cover" />
       </div>
       <Group
         className={`px-4 py-[6px] ${
