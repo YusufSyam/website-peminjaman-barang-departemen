@@ -171,7 +171,6 @@ export function StickerInventory({
   );
 }
 
-
 export function SearchFilled({
   size = 24,
   color = "black",
@@ -190,6 +189,198 @@ export function SearchFilled({
     >
       <path
         d="M10 2.5a7.5 7.5 0 0 1 5.964 12.048l4.743 4.745a1 1 0 0 1-1.32 1.497l-.094-.083-4.745-4.743A7.5 7.5 0 1 1 10 2.5Zm0 2a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11Z"
+        fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconRightArrow({
+  size = 24,
+  color = "black",
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size + `px`}
+      height={size + `px`}
+      viewBox={`0 -960 960 960`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
+      className={className}
+    >
+      <path
+        d="m600-200-42-42 208-208H80v-60h686L558-718l42-42 280 280-280 280Z"
+        fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconRightArrowNoTail({
+  size = 24,
+  color = "black",
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size + `px`}
+      height={size + `px`}
+      viewBox={`0 -960 960 960`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
+      className={className}
+    >
+      <path
+        d="m517.847-480-184-184L376-706.153 602.153-480 376-253.847 333.847-296l184-184Z"
+        fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconEditFilled({
+  size = 24,
+  color = "black",
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size + `px`}
+      height={size + `px`}
+      viewBox={`0 -960 960 960`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
+      className={className}
+    >
+      <path
+        d="M772-603 602-771l56-56q23-23 56.5-23t56.5 23l56 56q23 23 24 55.5T829-660l-57 57Zm-58 59L290-120H120v-170l424-424 170 170Z"
+        fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconTrashFilled({
+  size = 24,
+  color = "black",
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size + `px`}
+      height={size + `px`}
+      viewBox={`0 -960 960 960`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
+      className={className}
+    >
+      <path
+        d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm80-160h80v-360h-80v360Zm160 0h80v-360h-80v360Z"
+        fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconReportFilled({
+  size = 24,
+  color = "black",
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size + `px`}
+      height={size + `px`}
+      viewBox={`0 -960 960 960`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
+      className={className}
+    >
+      <path
+        d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240ZM330-120 120-330v-300l210-210h300l210 210v300L630-120H330Z"
+        fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconReportOutlined({
+  size = 24,
+  color = "black",
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size + `px`}
+      height={size + `px`}
+      viewBox={`0 -960 960 960`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
+      className={className}
+    >
+      <path
+        d="M480-280q17 0 28.5-11.5T520-320q0-17-11.5-28.5T480-360q-17 0-28.5 11.5T440-320q0 17 11.5 28.5T480-280Zm-40-160h80v-240h-80v240ZM330-120 120-330v-300l210-210h300l210 210v300L630-120H330Zm34-80h232l164-164v-232L596-760H364L200-596v232l164 164Zm116-280Z"
+        fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconInformationCircleFilled({
+  size = 24,
+  color = "black",
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size + `px`}
+      height={size + `px`}
+      viewBox={`0 -960 960 960`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
+      className={className}
+    >
+      <path
+        d="M431.521-271.521h96.958V-520h-96.958v248.479ZM480-588.695q21.805 0 36.555-14.75T531.305-640q0-21.805-14.75-36.555T480-691.305q-21.805 0-36.555 14.75T428.695-640q0 21.805 14.75 36.555T480-588.695Zm0 527.913q-87.522 0-163.906-32.96-76.385-32.96-132.888-89.464-56.504-56.503-89.464-132.888Q60.782-392.478 60.782-480t32.96-163.906q32.96-76.385 89.464-132.888 56.503-56.504 132.888-89.464 76.384-32.96 163.906-32.96t163.906 32.96q76.385 32.96 132.888 89.464 56.504 56.503 89.464 132.888 32.96 76.384 32.96 163.906t-32.96 163.906q-32.96 76.385-89.464 132.888-56.503 56.504-132.888 89.464Q567.522-60.782 480-60.782Z"
+        fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconQuestionMarkCircleFilled({
+  size = 24,
+  color = "black",
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size + `px`}
+      height={size + `px`}
+      viewBox={`0 -960 960 960`}
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
+      className={className}
+    >
+      <path
+        d="M476.304-240q23.261 0 39.74-16.478 16.478-16.479 16.478-39.819 0-23.341-16.478-39.457-16.479-16.116-39.74-16.116-23.261 0-39.739 16.116-16.478 16.116-16.478 39.457 0 23.34 16.478 39.819Q453.043-240 476.304-240Zm-42.217-154h85.304q0-30.739 7.783-50.304 7.783-19.566 39.956-50.305 24.305-23.739 39.022-48.118 14.718-24.379 14.718-58.613 0-58.095-39.87-88.943-39.87-30.847-95.87-30.847-59.26 0-97.587 32.826-38.326 32.826-53.456 78.217l78.435 29.957q6.13-19.13 22.217-39.565t47.565-20.435q25.217 0 38.391 14.674t13.174 32.282q0 17.174-11.152 33.826t-25.196 28.261q-41.739 37.869-52.587 59.848-10.847 21.978-10.847 77.239ZM480-60.782q-87.522 0-163.906-32.96-76.385-32.96-132.888-89.464-56.504-56.503-89.464-132.888Q60.782-392.478 60.782-480t32.96-163.906q32.96-76.385 89.464-132.888 56.503-56.504 132.888-89.464 76.384-32.96 163.906-32.96t163.906 32.96q76.385 32.96 132.888 89.464 56.504 56.503 89.464 132.888 32.96 76.384 32.96 163.906t-32.96 163.906q-32.96 76.385-89.464 132.888-56.503 56.504-132.888 89.464Q567.522-60.782 480-60.782Z"
         fill={color}
       />
     </svg>

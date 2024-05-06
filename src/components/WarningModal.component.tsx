@@ -1,0 +1,101 @@
+import {
+  Button,
+  Group,
+  useMantineTheme,
+  Text,
+  ButtonProps,
+  Stack,
+  ModalProps
+} from "@mantine/core";
+import React from "react";
+import Modal from "./MyModal.component";
+import { SmallButton } from "./MyButton";
+import { IconReportFilled, IconReportOutlined } from "../assets/icons/Fluent";
+
+interface IWarningModal {
+  opened: boolean;
+  setOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string;
+  children?: string | JSX.Element;
+  onSubmit?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onCloseFunc?: () => void;
+  noButtonLabel?: string;
+  yesButtonLabel?: string;
+  minWidth?: number;
+  disableNoButton?: boolean;
+  subTitle?: string;
+  leftTitleIcon?: JSX.Element;
+}
+
+const WarningModal = ({
+  opened,
+  setOpened,
+  title,
+  children = "Data yang telah dihapus tidak dapat dikembalikan.",
+  onSubmit,
+  noButtonLabel = "Batal",
+  yesButtonLabel = "Iya",
+  minWidth = 600,
+  onCloseFunc = () => {},
+  disableNoButton = false,
+  subTitle = "",
+  leftTitleIcon,
+  ...props
+}: IWarningModal & ModalProps) => {
+  const theme = useMantineTheme();
+
+  return (
+    <Modal
+      {...props}
+      opened={opened}
+      setOpened={setOpened}
+      onCloseFunc={onCloseFunc}
+      minWidth={minWidth}
+      subTitle={subTitle}
+      title={
+        <Group className="gap-3 ">
+          {leftTitleIcon == null ? (
+            <IconReportFilled
+              color={theme.colors["error"][5]}
+              size={40}
+              className=""
+            />
+          ) : (
+            <>{leftTitleIcon}</>
+          )}
+          <Text className="text-[24px] text-primary-text-500 font-poppins-semibold">
+            {title}
+          </Text>
+        </Group>
+      }
+    >
+      <Stack className="relative ">
+        {typeof children === "string" ? (
+          <Text className="text-lg text-primary-text-500 ml-[48px]">
+            {children}
+          </Text>
+        ) : (
+          <div className="text-lg text-primary-text-500 ml-[48px]">{children}</div>
+        )}
+        <Group className="self-end mt-4 gap-6">
+          <SmallButton
+            className="!text-red !border-white "
+            disabled={disableNoButton}
+            onClick={() => setOpened(false)}
+          >
+            {noButtonLabel}
+          </SmallButton>
+          <SmallButton
+            className="!bg-red !rounded-md !border-transparent !text-white"
+            // disabled={value == null}
+            onClick={onSubmit}
+          >
+            {yesButtonLabel}
+          </SmallButton>
+        </Group>
+      </Stack>
+    </Modal>
+  );
+};
+
+export default WarningModal;

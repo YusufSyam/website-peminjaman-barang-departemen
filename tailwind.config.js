@@ -20,7 +20,9 @@ export default {
       "green": "#03873f",
       "light-green": "#12c865",
       "primary-text": "#334155",
-      "secondary-text": "#808fa4"
+      "primary-text-500": "#334155",
+      "secondary-text": "#808fa4",
+      "secondary-text-500": "#808fa4",
     },
     fontFamily: {
       'poppins': [
