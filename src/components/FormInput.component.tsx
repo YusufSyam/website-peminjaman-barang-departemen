@@ -28,7 +28,7 @@ export const getDefaultStyle = (
   const color = isError
     ? theme.colors.error[5]
     : isFocus
-    ? theme.colors.primary[5]
+    ? theme.colors['primary-text'][5]
     : theme.colors["secondary-text"][5];
   return {
     input: {
@@ -51,13 +51,13 @@ export const getDefaultStyle = (
   };
 };
 
-export const TextInput = ({ onFocus, onBlur, ...props }: TextInputProps) => {
+export const MyTextInput = ({ onFocus, onBlur, ...props }: TextInputProps) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
 
   return (
     <>
       <MantineTextInput
-        className="text-primary-500"
+        className="text-primary-text"
         size="lg"
         styles={{ ...getDefaultStyle(isFocus, !!props.error) }}
         onFocus={(e) => {
@@ -69,7 +69,34 @@ export const TextInput = ({ onFocus, onBlur, ...props }: TextInputProps) => {
           if (!!onBlur) onBlur(e);
         }}
         {...props}
+
       />
     </>
+  );
+};
+
+
+export const MyNumberInput = ({
+  onFocus,
+  onBlur,
+  ...props
+}: NumberInputProps) => {
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+
+  return (
+    <MantineNumberInput
+      size="lg"
+      // hideControls
+      styles={{ ...getDefaultStyle(isFocus, !!props.error) }}
+      onFocus={(e) => {
+        setIsFocus(true);
+        if (!!onFocus) onFocus(e);
+      }}
+      onBlur={(e) => {
+        setIsFocus(false);
+        if (!!onBlur) onBlur(e);
+      }}
+      {...props}
+    />
   );
 };

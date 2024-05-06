@@ -2,7 +2,7 @@ import React from "react";
 import MainLayout from "../../layouts/MainLayout.layout";
 import { Grid, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import ActivityItem from "./ActivityItem.component";
-import { TextInput } from "../../components/TextInput";
+import { MyTextInput } from "../../components/FormInput.component";
 import { SearchFilled } from "../../assets/icons/Fluent";
 
 export interface IActivity {}
@@ -20,7 +20,7 @@ const Activity: React.FC<IActivity> = ({}) => {
               Telusuri riwayat aktivitas peminjaman barang
             </Text>
           </Stack>
-          <TextInput
+          <MyTextInput
             icon={<SearchFilled color="#dfdfdf" />}
             onChange={() => {}}
             placeholder="Cari barang / nim . . ."
