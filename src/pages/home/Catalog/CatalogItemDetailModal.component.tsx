@@ -1,4 +1,11 @@
-import { Button, Group, Stack, Text, useMantineTheme } from "@mantine/core";
+import {
+  Button,
+  Grid,
+  Group,
+  Stack,
+  Text,
+  useMantineTheme
+} from "@mantine/core";
 import React, { useState } from "react";
 import { IconTrashFilled, IconEditFilled } from "../../../assets/icons/Fluent";
 import MyModal from "../../../components/MyModal.component";
@@ -52,7 +59,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                     Tersedia
                   </Text>
                   <Group className="gap-1">
-                    <Text className="bg-green px-2 py-[2px] rounded-md text-white font-poppins text-2xl -mt-1">
+                    <Text className="bg-green px-2 py-[2px] rounded-xl text-white font-poppins text-2xl -mt-1">
                       10
                     </Text>
                     <Text className="text-primary-text font-poppins text-xl -mt-1">
@@ -65,7 +72,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                     Dipinjam
                   </Text>
                   <Group className="gap-1">
-                    <Text className="bg-red px-2 py-[2px] rounded-md text-white font-poppins text-2xl -mt-1">
+                    <Text className="bg-red px-2 py-[2px] rounded-xl text-white font-poppins text-2xl -mt-1">
                       10
                     </Text>
                     <Text className="text-primary-text font-poppins text-xl -mt-1">
@@ -78,7 +85,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                     Total
                   </Text>
                   <Group className="gap-1">
-                    <Text className="bg-secondary-text px-2 py-[2px] rounded-md text-white font-poppins text-2xl -mt-1">
+                    <Text className="bg-secondary-text px-2 py-[2px] rounded-xl text-white font-poppins text-2xl -mt-1">
                       10
                     </Text>
                     <Text className="text-primary-text font-poppins text-xl -mt-1">
@@ -98,29 +105,34 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                 voluptatum molestiae dolorum. lorem1000
               </Text>
             </Stack>
-            <Group className="absolute left-[422px] right-0 bottom-0 justify-between">
-              <Group>
-                <IconTrashFilled
-                  size={36}
-                  color={theme.colors["white"][5]}
-                  onClick={() => {
-                    setOpenedDelete(true);
-                  }}
-                  className="p-[6px] rounded-md bg-dark-red cursor-pointer border border-dark-red"
-                />
-                <IconEditFilled
-                  size={36}
-                  color={theme.colors["orange"][5]}
-                  onClick={()=>{
-                    setOpenedEdit(true)
-                  }}
-                  className="p-[6px] rounded-md bg-white cursor-pointer border border-orange"
-                />
-              </Group>
-              <Button className="bg-gradient-to-r from-dark-red to-red">
-                Pinjam
-              </Button>
-            </Group>
+            <Grid className="absolute bottom-0 right-0 left-[422px]">
+              <Grid.Col span={3}>
+                <Group className="flex-nowrap">
+                  <IconTrashFilled
+                    size={36}
+                    color={theme.colors["white"][5]}
+                    onClick={() => {
+                      setOpenedDelete(true);
+                    }}
+                    className="p-[6px] w-full rounded-full bg-dark-red cursor-pointer border border-dark-red"
+                  />
+                  <IconEditFilled
+                    size={36}
+                    color={theme.colors["orange"][5]}
+                    onClick={() => {
+                      setOpenedEdit(true);
+                    }}
+                    className="p-[6px] w-full rounded-full bg-white cursor-pointer border border-orange"
+                  />
+                </Group>
+              </Grid.Col>
+
+              <Grid.Col span={9}>
+                <Button className="rounded-full bg-gradient-to-r from-dark-red to-red w-full">
+                  Pinjam
+                </Button>
+              </Grid.Col>
+            </Grid>
           </Stack>
         </Group>
       </MyModal>

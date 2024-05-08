@@ -72,14 +72,14 @@ const Catalog: React.FC<ICatalog> = ({}) => {
         </Stack>
         <Group>
           <Button
-            className="rounded-md bg-gradient-to-r from-green to-light-green"
+            className="bg-green hover:bg-light-green duration-100 rounded-full"
             onClick={() => {
               setOpenedAddItem(true);
             }}
             leftIcon={
               <IconAddFilled
-                color={theme.colors["green"][5]}
-                className="-ml-[6px] rounded-sm p-[2px] bg-white"
+                color={theme.colors["white"][5]}
+                className="-ml-[2px]"
               />
             }
           >

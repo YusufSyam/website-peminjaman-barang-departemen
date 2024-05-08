@@ -108,7 +108,7 @@ const EditNewCatalogModal: React.FC<IEditNewCatalogModal> = ({
         />
         <Button
           onClick={handleAddCatalogItem}
-          className="bg-green hover:bg-green"
+          className="bg-green hover:bg-light-green rounded-full duration-100"
           disabled={
             values?.image == null ||
             values?.itemName == null ||

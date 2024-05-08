@@ -18,7 +18,7 @@ const _Button = forwardRef<HTMLButtonElement, ButtonProps>(
           backgroundColor: "#FFFFFF !important",
           width: "fit !important",
           border: "1px solid #334155 !important",
-          borderRadius: "8px !important",
+          borderRadius: "999px !important",
           color: "#334155 !important",
           fontSize: "16px",
           

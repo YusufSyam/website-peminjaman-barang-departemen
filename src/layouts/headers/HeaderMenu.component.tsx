@@ -17,7 +17,7 @@ const HeaderMenu: React.FC<IHeaderMenu> = ({ href, label, activePage }) => {
           activePage.toLowerCase() == label.toLowerCase()
             ? `bg-red text-white`
             : `bg-white text-primary-text`
-        } rounded-md py-[5px] px-4`}
+        } rounded-full py-[5px] px-4`}
       >
         {label}
       </Text>

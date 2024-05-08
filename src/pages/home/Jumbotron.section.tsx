@@ -6,7 +6,7 @@ export interface IJumbotron {}
 
 const Jumbotron: React.FC<IJumbotron> = ({}) => {
   return (
-    <Stack className="bg-gradient-to-r from-dark-red via-red to-light-red w-full p-8 rounded-lg">
+    <Stack className="bg-gradient-to-r from-dark-red via-red to-light-red w-full p-8 rounded-3xl">
       <Grid className="flex-nowrap" gutter={"xl"}>
         <Grid.Col span={2}>
           <StickerInventory size={200} />

@@ -138,7 +138,7 @@ const DocumentInput: React.FC<IDocumentInputProps> = ({
           <Group grow spacing={"md"} className="mt-4">
             <Button
               variant="light"
-              className="bg-primary-text py-[10px] h-max rounded-lg text-white hover:bg-primary-text"
+              className="rounded-full bg-primary-text py-[10px] h-max text-white hover:bg-primary-text"
               onClick={onPreviewClick}
             >
               <PreviewIcon size={14} color={"white"} className="mr-2" />
@@ -147,7 +147,7 @@ const DocumentInput: React.FC<IDocumentInputProps> = ({
             {withDelete && (
               <Button
                 variant="light"
-                className="bg-red !important py-[10px] h-max rounded-lg text-white hover:bg-red"
+                className="rounded-full bg-red !important py-[10px] h-max text-white hover:bg-red"
                 onClick={onDelete}
                 disabled={disabled}
               >
