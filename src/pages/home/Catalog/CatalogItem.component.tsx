@@ -33,7 +33,6 @@ const CatalogItem: React.FC<ICatalogItem> = ({
 
   const [opened, setOpened] = useState(false);
   const [openedDelete, setOpenedDelete] = useState(false)
-  console.log("opened", opened);
 
   return (
     <>

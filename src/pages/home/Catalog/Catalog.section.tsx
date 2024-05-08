@@ -7,23 +7,12 @@ import {
   Text,
   useMantineTheme
 } from "@mantine/core";
-import React, { useEffect, useState } from "react";
-import CatalogItem, { ICatalogItem } from "./CatalogItem.component";
-import { dummyCatalogList } from "../../../utils/const/dummy";
 import { useDebouncedValue } from "@mantine/hooks";
-import { IconAddFilled, SearchFilled } from "../../../assets/icons/Fluent";
-import MyModal from "../../../components/MyModal.component";
-import {
-  MyNumberInput,
-  MyTextInput
-} from "../../../components/FormInput.component";
-import {
-  IAddNewCatalogItemInterfaces,
-  AddNewCatalogItemSchema
-} from "./AddNewCatalogItemInterfaces.interface";
-import { useForm, yupResolver } from "@mantine/form";
-import DocumentInput from "../../../components/DocumentInput.component";
-import { MIME_TYPES } from "@mantine/dropzone";
+import React, { useEffect, useState } from "react";
+import { IconAddFilled } from "../../../assets/icons/Fluent";
+import { dummyCatalogList } from "../../../utils/const/dummy";
+import AddNewCatalogModal from "./AddNewCatalogModal.component";
+import CatalogItem, { ICatalogItem } from "./CatalogItem.component";
 
 export interface ICatalog {}
 
@@ -47,21 +36,6 @@ const Catalog: React.FC<ICatalog> = ({}) => {
     setActivePage(1);
   }
 
-  const form = useForm<IAddNewCatalogItemInterfaces>({
-    validate: yupResolver(AddNewCatalogItemSchema)
-  });
-
-  const {
-    getInputProps,
-    errors,
-    isDirty,
-    values,
-    setValues,
-    reset,
-    isValid,
-    onSubmit
-  } = form;
-
   useEffect(() => {
     setPageAmt(Math.round(catalogList?.length / dataPerPageAmt + 0.4));
   }, [catalogList]);
@@ -74,64 +48,9 @@ const Catalog: React.FC<ICatalog> = ({}) => {
     setCatalogList(tempCatalogList);
   }, [query]);
 
-  console.log(query);
-  console.log(catalogList);
-
-  console.log('values',values)
-
   return (
     <Stack>
-      <MyModal
-        opened={openedAddItem}
-        setOpened={setOpenedAddItem}
-        title={"Tambah Barang Baru Pada Katalog"}
-        onClose={() => {}}
-        minWidth={600}
-      >
-        <Stack>
-          <MyTextInput
-            label="Nama Barang"
-            size="md"
-            placeholder="Masukkan Nama Barang"
-            {...getInputProps("itemName")}
-            error={errors["itemName" as keyof IAddNewCatalogItemInterfaces]}
-            defaultValue={""}
-          />
-          <MyNumberInput
-            label="Stok Barang"
-            size="md"
-            placeholder="Masukkan Jumlah Stok Barang"
-            {...getInputProps("stock")}
-            error={errors["stock" as keyof IAddNewCatalogItemInterfaces]}
-            defaultValue={""}
-            min={0}
-          />
-          <MyTextInput
-            label="Deskripsi"
-            size="md"
-            placeholder="Masukkan Deskripsi Barang"
-            {...getInputProps("description")}
-            error={errors["description" as keyof IAddNewCatalogItemInterfaces]}
-            defaultValue={""}
-          />
-          <DocumentInput
-            withDelete
-            {...getInputProps("image")}
-            required
-            accept={[MIME_TYPES.png, MIME_TYPES.jpeg, MIME_TYPES.mp4]}
-            label="Gambar Barang"
-            placeholder="Seret dan tempatkan file, atau klik untuk memilih file."
-            description="Ekstensi file png, jpeg atau mp4. Ukuran file maksimal 100 MB."
-            error={
-              errors[`${"image" as keyof IAddNewCatalogItemInterfaces}.name`]
-            }
-            maxSize={100_000_000}
-          />
-          <Button className="bg-green hover:bg-green">
-            Tambah
-          </Button>
-        </Stack>
-      </MyModal>
+      <AddNewCatalogModal opened={openedAddItem} setOpened={setOpenedAddItem} />
       <Group className="mb-4 justify-between">
         <Stack className="gap-0">
           <Group>
