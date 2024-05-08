@@ -100,3 +100,31 @@ export const MyNumberInput = ({
     />
   );
 };
+
+{/* <DatePicker
+          allowDeselect
+          value={value}
+          minDate={minDate}
+          maxDate={maxDate}
+          size="md"
+          locale="id"
+          onChange={(v: Date) => {
+            console.log("Ini v: ", v);
+            setValue(v);
+          }}
+          styles={{
+            calendar: {
+              margin: "auto"
+            }
+          }}
+          getDayProps={(date) => {
+            if (value != null && date.getTime() == value.getTime()) {
+              return {
+                bg: `${theme.colors["red"][5]} !important`
+              };
+            }
+
+            return {};
+          }}
+          yearLabelFormat="[Tahun] YYYY"
+        /> */}
