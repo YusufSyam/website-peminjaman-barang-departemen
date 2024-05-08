@@ -149,7 +149,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
         onClick={() => {
           setOpened(true);
         }}
-        className="mb-8 w-full border border-secondary rounded-md overflow-hidden gap-0 shadow-xl hover:shadow-2xl duration-200 cursor-pointer"
+        className="mb-8 w-full border border-secondary rounded-md overflow-hidden gap-0 hover:scale-[1.01] shadow-xl hover:shadow-2xl duration-200 cursor-pointer"
       >
         <div className="w-full h-[200px] rounded-t-md overflow-hidden">
           <img

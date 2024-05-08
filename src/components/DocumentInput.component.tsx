@@ -96,7 +96,7 @@ const DocumentInput: React.FC<IDocumentInputProps> = ({
         label={label}
         styles={{
           label: {
-            color: theme.colors["secondary-text"][9],
+            color: theme.colors["secondary-text"][5],
             marginBottom: "10px",
             fontSize: "16px",
             fontWeight: 600
@@ -106,7 +106,7 @@ const DocumentInput: React.FC<IDocumentInputProps> = ({
         <Dropzone
           onDrop={handleDrop}
           className={
-            `items-center gap-[1px] border border-secondary-text-500 pt-7 pb-5 rounded-xl border-solid` +
+            `items-center gap-[1px] border-2 border-secondary pt-7 pb-5 rounded-xl border-solid` +
             (disabled == true ? `cursor-context-menu` : ``)
           }
           disabled={disabled}
