@@ -69,7 +69,6 @@ export const MyTextInput = ({ onFocus, onBlur, ...props }: TextInputProps) => {
           if (!!onBlur) onBlur(e);
         }}
         {...props}
-
       />
     </>
   );

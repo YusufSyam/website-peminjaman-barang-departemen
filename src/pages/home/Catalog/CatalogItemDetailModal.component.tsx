@@ -17,14 +17,19 @@ export interface ICatalogItemDetailModal {
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
   label: string;
   image: string;
+  stock: number;
+  borrowed: number;
 }
 
 const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
   opened,
   setOpened,
   label,
-  image
+  image,
+  borrowed,
+  stock
 }) => {
+  const isAvailable = borrowed < stock;
   const theme = useMantineTheme();
 
   const [openedDelete, setOpenedDelete] = useState(false);
@@ -47,8 +52,13 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
           <Stack className="self-start gap-2 ">
             <Stack className="gap-0">
               <Text className="text-primary-text font-semibold">Status</Text>
-              <Text className="text-green font-poppins text-2xl -mt-1">
-                Tersedia
+              <Text
+                className={`
+              ${
+                isAvailable ? `text-green` : `text-red`
+              } font-poppins text-2xl -mt-1`}
+              >
+                {isAvailable ? "Tersedia" : "Tidak Tersedia"}
               </Text>
             </Stack>
             <Stack className="gap-0">
@@ -60,7 +70,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                   </Text>
                   <Group className="gap-1">
                     <Text className="bg-green px-2 py-[2px] rounded-xl text-white font-poppins text-2xl -mt-1">
-                      10
+                      {stock-borrowed}
                     </Text>
                     <Text className="text-primary-text font-poppins text-xl -mt-1">
                       Item
@@ -73,7 +83,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                   </Text>
                   <Group className="gap-1">
                     <Text className="bg-red px-2 py-[2px] rounded-xl text-white font-poppins text-2xl -mt-1">
-                      10
+                      {borrowed}
                     </Text>
                     <Text className="text-primary-text font-poppins text-xl -mt-1">
                       Item
@@ -86,7 +96,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                   </Text>
                   <Group className="gap-1">
                     <Text className="bg-secondary-text px-2 py-[2px] rounded-xl text-white font-poppins text-2xl -mt-1">
-                      10
+                      {stock}
                     </Text>
                     <Text className="text-primary-text font-poppins text-xl -mt-1">
                       Item

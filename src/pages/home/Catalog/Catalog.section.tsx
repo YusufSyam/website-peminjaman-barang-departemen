@@ -9,10 +9,11 @@ import {
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
-import { IconAddFilled } from "../../../assets/icons/Fluent";
+import { IconAddFilled, SearchFilled } from "../../../assets/icons/Fluent";
 import { dummyCatalogList } from "../../../utils/const/dummy";
 import AddNewCatalogModal from "./AddNewCatalogModal.component";
 import CatalogItem, { ICatalogItem } from "./CatalogItem.component";
+import { MyTextInput } from "../../../components/FormInput.component";
 
 export interface ICatalog {}
 
@@ -51,7 +52,7 @@ const Catalog: React.FC<ICatalog> = ({}) => {
   return (
     <Stack>
       <AddNewCatalogModal opened={openedAddItem} setOpened={setOpenedAddItem} />
-      <Group className="mb-4 justify-between">
+      <Group className=" justify-between">
         <Stack className="gap-0">
           <Group>
             <Text className="text-primary-text font-poppins-semibold text-[32px] text-start">
@@ -86,6 +87,16 @@ const Catalog: React.FC<ICatalog> = ({}) => {
             Tambah Barang
           </Button>
         </Group>
+      </Group>
+
+      <Group className="self-center mb-4">
+        <MyTextInput
+          icon={<SearchFilled color="#dfdfdf" />}
+          onChange={handleSearchChange}
+          placeholder="Cari barang . . ."
+          size="md"
+          className="w-96"
+        />
       </Group>
       <Grid className="" gutter={32}>
         {catalogList

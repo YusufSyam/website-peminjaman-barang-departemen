@@ -22,16 +22,18 @@ import CatalogItemDetailModal from "./CatalogItemDetailModal.component";
 export interface ICatalogItem {
   label?: string;
   stock?: number;
+  borrowed?: number;
   image?: string;
 }
 
 const CatalogItem: React.FC<ICatalogItem> = ({
   label = "Kamera",
   stock = 11,
+  borrowed=5,
   image = noItem
 }) => {
   const theme = useMantineTheme();
-  const isAvailable = stock > 0;
+  const isAvailable = borrowed<stock;
 
   const [opened, setOpened] = useState(false);
 
@@ -42,6 +44,8 @@ const CatalogItem: React.FC<ICatalogItem> = ({
         setOpened={setOpened}
         label={label}
         image={image}
+        stock={stock}
+        borrowed={borrowed}
       />
       <div
         className={`p-2 rounded-[40px] mb-8 hover:shadow-2xl shadow-xl duration-200 cursor-pointer
@@ -78,7 +82,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
                 {isAvailable && (
                   <span className="text-sm text-secondary-text font-normal">
                     {" "}
-                    ({stock} Item)
+                    ({stock-borrowed} Item)
                   </span>
                 )}
               </Text>
