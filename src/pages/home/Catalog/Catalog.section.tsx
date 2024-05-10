@@ -60,9 +60,8 @@ const Catalog: React.FC<ICatalog> = ({}) => {
         <Text className="font-poppins-semibold text-primary-text text-[30px] ml-1">
           Katalog Inventaris
         </Text>
-        <Group>
+        <Group className="gap-6">
           <MySearchInput
-            icon={<SearchFilled color="#dfdfdf" />}
             onChange={handleSearchChange}
             w={280}
             placeholder="Cari barang . . ."

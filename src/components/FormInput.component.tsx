@@ -22,7 +22,8 @@ import { DatePickerInputProps, DatePickerInput } from "@mantine/dates";
 import { useState } from "react";
 import {
   IconCalendarLtrOutline,
-  IconSearchOutlined
+  IconSearchOutlined,
+  SearchFilled
 } from "../assets/icons/Fluent";
 
 export const getDefaultStyle = (
@@ -85,7 +86,7 @@ export const getDefaultStyleSearch = (
       },
       ":focus": {
         borderColor: theme.colors["primary-text"][5]
-      },
+      }
     },
     label: {
       fontWeight: 800,
@@ -107,30 +108,42 @@ export const getDefaultStyleDatePickerInput = (
   const color = isError
     ? theme.colors.error[5]
     : isFocus
-    ? theme.colors["primary-text"][5]
-    : theme.colors["secondary-text"][5];
+    ? theme.colors["white"][5]
+    : theme.colors["white"][5];
   return {
     input: {
-      ":focus": {
-        border: "2px solid",
-        color
-      },
-      // borderWidth: "2px",
+      // ":focus": {
+      //   border: "2px solid",
+      //   backgroundColor: theme.colors["green"][5],
+      //   paddingRight: "36px",
+      //   color
+      // },
+      // ":focus-within":{
+      //   paddingRight: "2px",
+      // },
+      padding: "8px",
+      paddingRight: "36px",
+      borderWidth: "2px",
       borderRadius: "9999px",
+      borderColor: theme.colors["green"][5],
+      backgroundColor: theme.colors["green"][5],
+      fontFamily: "poppins-light",
       color,
       fontWeight: 600,
       letterSpacing: "0.01em",
       ":disabled": {
         color
-      }
+      },
+      
     },
     label: {
       fontWeight: 600,
       color
     },
     icon: {
-      paddingLeft: "6px"
-    }
+      paddingLeft: "6px",
+      color: "white"
+    },
   };
 };
 
@@ -223,7 +236,7 @@ export const MyDatePickerInput = ({
     <DatePickerInput
       size="md"
       styles={{ ...getDefaultStyleDatePickerInput(isFocus, !!props.error) }}
-      icon={<IconCalendarLtrOutline color={theme.colors["red"][5]} />}
+      icon={<IconCalendarLtrOutline color={theme.colors["white"][5]} className={`self-center`} />}
       onFocus={(e) => {
         setIsFocus(true);
         if (!!onFocus) onFocus(e);
@@ -250,10 +263,7 @@ export const MySearchInput = ({
       <MantineTextInput
         styles={{ ...getDefaultStyleSearch(isFocus, !!props.error) }}
         icon={
-          <IconSearchOutlined
-            size={22}
-            color={theme.colors["primary-text"][5]}
-          />
+          <SearchFilled size={22} color={theme.colors["secondary-text"][5]} />
         }
         onFocus={(e) => {
           setIsFocus(true);

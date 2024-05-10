@@ -78,20 +78,22 @@ const WarningModal = ({
           <div className="text-lg text-primary-text-500 ml-[48px]">{children}</div>
         )}
         <Group className="self-end mt-4 gap-6">
-          <SmallButton
-            className="!text-red !border-white "
+          <Button
+            className="!text-red !border-white bg-white hover:!bg-white rounded-full"
             disabled={disableNoButton}
             onClick={() => setOpened(false)}
+            size="md"
           >
             {noButtonLabel}
-          </SmallButton>
-          <SmallButton
-            className="!bg-red !rounded-md !border-transparent !text-white"
+          </Button>
+          <Button
+            className="bg-red !border-transparent !text-white rounded-full hover:bg-light-red duration-200"
             // disabled={value == null}
             onClick={onSubmit}
+            size="md"
           >
             {yesButtonLabel}
-          </SmallButton>
+          </Button>
         </Group>
       </Stack>
     </Modal>

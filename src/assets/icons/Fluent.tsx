@@ -551,3 +551,75 @@ export function IconCalendarLtrOutline({
     </svg>
   );
 }
+
+export function IconSendOutline({
+  size = 24,
+  color = 'black',
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size+`px`}
+      height={size+`px`}
+      viewBox={`0 -960 960 960`}
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+      onClick={onClick}
+      className={className}
+    >
+      <path
+      d='M112.59-152.35v-655.3L889.57-480 112.59-152.35ZM200-283.59 665.15-480 200-676.41v132.82L443.59-480 200-416.41v132.82Zm0 0v-392.82 392.82Z'
+      fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconReplyOutline({
+  size = 24,
+  color = 'black',
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size+`px`}
+      height={size+`px`}
+      viewBox={`0 -960 960 960`}
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+      onClick={onClick}
+      className={className}
+    >
+      <path
+      d='M757.13-191.87V-360q0-47.85-33.33-81.17-33.32-33.33-81.17-33.33H285.44L423.93-336l-64.41 63.65L111.87-520l247.65-247.65L423.93-704 285.44-565.5h357.19q85.15 0 145.33 60.17 60.17 60.18 60.17 145.33v168.13h-91Z'
+      fill={color}
+      />
+    </svg>
+  );
+}
+
+export function IconShareWindowsOutline({
+  size = 24,
+  color = 'black',
+  onClick,
+  className
+}: IFluentProps) {
+  return (
+    <svg
+      width={size+`px`}
+      height={size+`px`}
+      viewBox={`0 -960 960 960`}
+      fill='none'
+      xmlns='http://www.w3.org/2000/svg'
+      onClick={onClick}
+      className={className}
+    >
+      <path
+      d='M280-360v-240q0-33 23.5-56.5T360-680h326L583-783l57-57 200 200-200 200-57-56 103-104H360v240h-80Zm-80 240q-33 0-56.5-23.5T120-200v-600h80v600h480v-160h80v160q0 33-23.5 56.5T680-120H200Z'
+      fill={color}
+      />
+    </svg>
+  );
+}

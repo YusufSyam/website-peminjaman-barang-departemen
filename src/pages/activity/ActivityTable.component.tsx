@@ -170,15 +170,31 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
       <Text className="font-poppins-semibold text-sm text-white" size={16}>
         Halaman {activePage >= pageAmt ? pageAmt : activePage} dari {pageAmt}
       </Text>
-      <Pagination
-        onChange={handlePageChange}
-        color={"red"}
-        // page={activePage >= pageAmt ? pageAmt : activePage}
-
-        total={pageAmt}
-        disabled={pageAmt == 0}
-        withEdges
-      />
+        <Pagination
+          color={"dark-red"}
+          onChange={handlePageChange}
+          total={pageAmt}
+          disabled={pageAmt == 0}
+          withEdges
+          styles={{
+            control: {
+              color: theme.colors["primary-text"][5],
+              borderRadius: "999px",
+              padding: "16px",
+              border: "2px solid #d4d3e7",
+              fontFamily: "poppins",
+              // backgroundColor: theme.colors['white'][5],
+              ":active": {
+                color: theme.colors["white"][5] + " !important"
+              },
+              ":hover": {
+                backgroundColor: theme.colors["light-red"][5] + " !important",
+                border: "2px solid #FFFFFF",
+                color: theme.colors["white"][5]
+              }
+            }
+          }}
+        />
     </>
   );
 
@@ -187,10 +203,10 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
   return (
     <div className={`h-fit`}>
       {" "}
-      <div className="grow basis-0 block overflow-x-auto whitespace-nowrap rounded-b-3xl">
+      <div className="grow basis-0 block overflow-x-auto whitespace-nowrap rounded-b-3xl border-2 border-secondary">
         <Table className={`w-full rounded-3xl`} verticalSpacing={"md"}>
           {showTableHeader && (
-            <thead className="relative">
+            <thead className="relative border-b-2 border-secondary">
               <tr className="">
                 {tableHeadings.map((head, index) => {
                   return (
@@ -213,7 +229,7 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
                         position={head.textAlign}
                         className=""
                       >
-                        <Text className="text-primary-text-500 font-semibold text-[14px]">
+                        <Text className="text-primary-text-500 !font-poppins-light text-[14px]">
                           {head.label}
                         </Text>
                       </Group>
@@ -239,7 +255,7 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
                       noWrap
                       position={"center"}
                     >
-                      <Text className="text-primary-text-500 text-md font-semibold text-[14px]">
+                      <Text className="text-primary-text-500 font-semibold text-[14px]">
                         Aksi
                       </Text>
                     </Group>
@@ -311,7 +327,7 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
                           return (
                             <td
                               key={th.key + e + col}
-                              className="border-b border-gray-200 fe-table-td"
+                              className="border-b-2 border-secondary"
                             >
                               <Text className="text-[14px] font-poppins">
                                 {col}

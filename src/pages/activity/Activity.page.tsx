@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "../../layouts/MainLayout.layout";
 import {
+  Divider,
   Grid,
   Group,
   SimpleGrid,
@@ -14,13 +15,22 @@ import {
   MySearchInput,
   MyTextInput
 } from "../../components/FormInput.component";
-import { IconAddFilled, SearchFilled } from "../../assets/icons/Fluent";
+import {
+  IconAddFilled,
+  IconReplyOutline,
+  IconShareWindowsOutline,
+  SearchFilled
+} from "../../assets/icons/Fluent";
 import ActivityTableComponent, {
   IFETableHeadingProps,
   IFETableRowColumnProps
 } from "./ActivityTable.component";
 import { dummyBorrowActivities } from "../../utils/const/dummy";
-import { formatDateNormal } from "../../utils/function/date.function";
+import {
+  formatDateDetection,
+  formatDateNormal
+} from "../../utils/function/date.function";
+import { useDebouncedValue } from "@mantine/hooks";
 
 export interface IActivity {}
 
@@ -50,19 +60,21 @@ const tableHeadings: IFETableHeadingProps[] = [
     label: "Barang",
     sortable: true,
     textAlign: "center",
-    cellKey: "item"
+    cellKey: "item",
+    width: "200px"
   },
   {
     label: "Peminjam",
     sortable: true,
-    textAlign: "left",
+    textAlign: "center",
     cellKey: "borrower"
   },
   {
     label: "Aktivitas",
     sortable: true,
-    textAlign: "left",
-    cellKey: "activity"
+    textAlign: "center",
+    cellKey: "activity",
+    width: "210px"
   },
   {
     label: "Detail Waktu",
@@ -73,8 +85,9 @@ const tableHeadings: IFETableHeadingProps[] = [
   {
     label: "Keterangan",
     sortable: true,
-    textAlign: "left",
-    cellKey: "additionalInformation"
+    textAlign: "center",
+    cellKey: "additionalInformation",
+    width: "100px"
   }
   // {
   //   label: "Aksi",
@@ -89,7 +102,53 @@ const Activity: React.FC<IActivity> = ({}) => {
   const [activePage, setActivePage] = useState<number>(1);
   const theme = useMantineTheme();
 
-  const borrowActivities: Array<IBorrowActivity> = dummyBorrowActivities;
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [query] = useDebouncedValue(searchTerm, 500);
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+
+  // const borrowActivities: Array<IBorrowActivity> = dummyBorrowActivities;
+  const [borrowActivities, setBorrowActivities] = useState<
+    Array<IBorrowActivity>
+  >(dummyBorrowActivities);
+
+  useEffect(() => {
+    const lowerQuery = query?.toLowerCase();
+
+    let tempActivity = dummyBorrowActivities?.filter(
+      (d: IBorrowActivity) =>
+        d?.itemName?.toLowerCase()?.includes(lowerQuery) ||
+        d?.borrower?.toLowerCase()?.includes(lowerQuery)
+    );
+
+    if (selectedDate != null) {
+      tempActivity = tempActivity?.filter(
+        (d: IBorrowActivity) =>
+          formatDateDetection(d?.borrowDate) ==
+          formatDateDetection(selectedDate)
+      );
+
+      console.log(tempActivity, "tempActivity");
+    }
+
+    setBorrowActivities(tempActivity);
+  }, [query, selectedDate]);
+
+  console.log(selectedDate, "selectedDate");
+  console.log(
+    borrowActivities?.[0]?.borrowDate,
+    formatDateDetection(borrowActivities?.[0]?.borrowDate),
+    "borrowActivities"
+  );
+  console.log(
+    selectedDate,
+    formatDateDetection(selectedDate || new Date()),
+    "borrowActivities"
+  );
+  console.log(
+    borrowActivities?.[0]?.borrowDate?.getTime() === selectedDate?.getTime(),
+    "borrowActivities"
+  );
 
   const tableRows = borrowActivities?.map(
     (data, idx) =>
@@ -103,81 +162,148 @@ const Activity: React.FC<IActivity> = ({}) => {
         item: {
           label: data.itemName,
           element: (
-            <Stack className="w-20 h-20 m-auto overflow-hidden rounded-full">
-              <img src={data.itemImage} className="w-20 h-20 object-cover" />
+            <Stack className="gap-2">
+              <Stack className="w-24 h-20 m-auto overflow-hidden rounded-2xl">
+                <img src={data.itemImage} className="w-24 h-20 object-cover" />
+              </Stack>
+              <Text className="text-primary-text-500 font-poppins">
+                {data.itemName}
+              </Text>
             </Stack>
           )
         },
         borrower: {
           label: data.borrower,
           element: (
-            <Text className="font-poppins text-lg text-primary-text-500">
-              {data.borrower}
-            </Text>
+            <Stack className="gap-0">
+              <Text className="font-poppins text-lg text-primary-text-500">
+                {data.borrower}
+              </Text>
+              <Text className="font-poppins text-lg text-secondary-text-500">
+                (H071191044)
+              </Text>
+            </Stack>
           )
         },
         activity: {
           label: data.activityType,
           element: (
-            <Text className="font-poppins text-lg text-primary-text-500">
-              {data.activityType}
-            </Text>
+            <div className="w-full">
+              <Group
+                className={`${
+                  data.activityType == "borrow" ? "bg-red" : "bg-green"
+                } self-center w-fit mx-auto py-[6px] px-4 rounded-full gap-2`}
+              >
+                {data.activityType == "borrow" ? (
+                  <IconShareWindowsOutline
+                    size={22}
+                    color={theme.colors["white"][5]}
+                  />
+                ) : (
+                  <IconReplyOutline
+                    size={20}
+                    color={theme.colors["white"][5]}
+                  />
+                )}
+                <Text className="text-lg text-white">
+                  {data.activityType == "borrow" ? "Meminjam" : "Mengembalikan"}
+                </Text>
+              </Group>
+            </div>
           )
         },
         timeDetail: {
           label: data.borrowTime,
           element: (
-            <Group className="">
-              <Stack className="gap-2">
-                {formatDateNormal(data.borrowDate)}
-              </Stack>
-            </Group>
+            <Stack className="">
+              <Group className="gap-2">
+                <Text className="font-semibold text-primary-text">
+                  Waktu Peminjaman
+                </Text>
+                <Text className="text-primary-text">
+                  {formatDateNormal(data.borrowDate)}, {data.borrowTime}:00
+                </Text>
+              </Group>
+              {data.activityType == "return" && (
+                <>
+                  <Divider />
+                  <Stack className="gap-0">
+                    <Group className="gap-2">
+                      <Text className="font-semibold text-primary-text">
+                        Waktu Pengembalian Seharusnya
+                      </Text>
+                      <Text className="text-primary-text">
+                        {formatDateNormal(data.supposedReturnDate)},{" "}
+                        {data.supposedReturnTime}:00
+                      </Text>
+                    </Group>
+                    <Group className="gap-2">
+                      <Text className="font-semibold text-primary-text">
+                        Waktu Dikembalikan Barang
+                      </Text>
+                      <Text className="text-primary-text">
+                        {formatDateNormal(data.actualReturnDate)},{" "}
+                        {data.actualReturnTime}:00
+                      </Text>
+                    </Group>
+                  </Stack>
+                </>
+              )}
+            </Stack>
           )
         },
         additionalInformation: {
           label: data.additionalInformation,
-          element: <Text>{data.additionalInformation}</Text>
+          element: (
+            <Stack className="">
+              <Text className="text-primary-text text-justify ">
+                {/* <span className="font-semibold">Keterangan Tambahan</span>{" "} */}
+                {data.additionalInformation}
+              </Text>
+            </Stack>
+          )
         }
       } as IFETableRowColumnProps)
   );
 
+  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>): void {
+    setSearchTerm(e.target.value);
+    setActivePage(1);
+  }
+
+  console.log(selectedDate, "selectedDate");
+
   return (
     <MainLayout activePage="Aktivitas">
-      <Stack className="px-12 mt-6 gap-10">
-        <Group className="justify-between">
-          <Stack className="gap-0">
-            <Text className="text-primary-text font-poppins-semibold text-[32px] text-start">
-              Riwayat Peminjaman
-            </Text>
-            <Text className="text-secondary-text text-start -mt-1">
-              Telusuri riwayat aktivitas peminjaman barang
-            </Text>
-          </Stack>
+      <Stack className="px-12 mt-6 gap-4">
+        <Group className="my-4 justify-between">
+          <Text className="font-poppins-semibold text-primary-text text-[30px] ml-1">
+            Riwayat Peminjaman
+          </Text>
+          <Group className="gap-6">
+            <MyDatePickerInput
+              size="md"
+              locale="id"
+              defaultValue={selectedDate}
+              valueFormat="DD MMM"
+              value={selectedDate}
+              onChange={setSelectedDate}
+              clearable
+            />
+
+            <MySearchInput
+              onChange={handleSearchChange}
+              w={240}
+              placeholder="Cari barang / nim . . ."
+            />
+          </Group>
         </Group>
         <Stack className="gap-0 rounded-t-3xl overflow-hidden">
-          <Group className="justify-between backdrop-blur-3xl bg-red  py-4 px-8 rounded-3-xl">
+          <Group className="justify-between backdrop-blur-3xl bg-red  py-4 px-8">
             <Group className="">
               <Text className="font-poppins-semibold text-2xl text-white">
-                Daftar Detektor
+                Daftar Aktivitas
               </Text>
-            </Group>
-            <Group className="gap-6">
-              <MyDatePickerInput
-                size="md"
-                locale="id"
-                defaultValue={new Date()}
-                valueFormat="DD MMM"
-                className="bg-secondary-500 rounded-full z-[1000]"
-                
-              />
-
-              <MySearchInput
-                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                  console.log(event.target.value)
-                }
-                w={240}
-                placeholder="Cari barang / nim . . ."
-              />
             </Group>
           </Group>
           <ActivityTableComponent
@@ -196,6 +322,7 @@ const Activity: React.FC<IActivity> = ({}) => {
             withSearch={false}
             actionOrientation="vertical"
             onProgressData={0}
+            showTableHeader
           />
         </Stack>
       </Stack>
