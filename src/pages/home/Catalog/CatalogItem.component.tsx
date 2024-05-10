@@ -48,7 +48,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
         borrowed={borrowed}
       />
       <div
-        className={`p-2 rounded-[40px] mb-8 hover:shadow-2xl shadow-xl duration-200 cursor-pointer
+        className={`p-2 rounded-[40px] mb-4 hover:shadow-2xl shadow-xl duration-200 cursor-pointer
           ${
             isAvailable
               ? `bg-green hover:bg-light-green `
@@ -68,7 +68,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
               className="w-full h-full object-cover rounded-[30px]"
             />
           </div>
-          <Group className="mt-4 mb-2 py-2 px-4 bg-white rounded-3xl justify-between">
+          <Group className="mt-4 mb-2 mx-1 py-2 px-4 bg-white rounded-3xl justify-between">
             <Stack className="gap-0  ">
               <Text className="text-start font-poppins text-primary-text">
                 {label}

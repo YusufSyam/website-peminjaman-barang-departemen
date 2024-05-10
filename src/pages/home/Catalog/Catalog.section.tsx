@@ -13,7 +13,10 @@ import { IconAddFilled, SearchFilled } from "../../../assets/icons/Fluent";
 import { dummyCatalogList } from "../../../utils/const/dummy";
 import AddNewCatalogModal from "./AddNewCatalogModal.component";
 import CatalogItem, { ICatalogItem } from "./CatalogItem.component";
-import { MyTextInput } from "../../../components/FormInput.component";
+import {
+  MySearchInput,
+  MyTextInput
+} from "../../../components/FormInput.component";
 
 export interface ICatalog {}
 
@@ -52,31 +55,24 @@ const Catalog: React.FC<ICatalog> = ({}) => {
   return (
     <Stack>
       <AddNewCatalogModal opened={openedAddItem} setOpened={setOpenedAddItem} />
-      <Group className=" justify-between">
-        <Stack className="gap-0">
-          <Group>
-            <Text className="text-primary-text font-poppins-semibold text-[32px] text-start">
-              Katalog Inventaris
-            </Text>
-
-            <div className="w-1 h-1 mt-1 rounded-full bg-secondary-text"></div>
-
-            <Group className="">
-              <Text className="text-secondary-text font-semibold">
-                Total {dummyCatalogList?.length} Item
-              </Text>
-            </Group>
-          </Group>
-          <Text className="text-secondary-text text-start -mt-1">
-            Jelajahi daftar barang dan status ketersediaannya
-          </Text>
-        </Stack>
+      {/* <Group className=" mb-4 self-center"> */}
+      <Group className="my-4 justify-between">
+        <Text className="font-poppins-semibold text-primary-text text-[30px] ml-1">
+          Katalog Inventaris
+        </Text>
         <Group>
+          <MySearchInput
+            icon={<SearchFilled color="#dfdfdf" />}
+            onChange={handleSearchChange}
+            w={280}
+            placeholder="Cari barang . . ."
+          />
           <Button
             className="bg-green hover:bg-light-green duration-100 rounded-full"
             onClick={() => {
               setOpenedAddItem(true);
             }}
+            size="md"
             leftIcon={
               <IconAddFilled
                 color={theme.colors["white"][5]}
@@ -87,16 +83,6 @@ const Catalog: React.FC<ICatalog> = ({}) => {
             Tambah Barang
           </Button>
         </Group>
-      </Group>
-
-      <Group className="self-center mb-4">
-        <MyTextInput
-          icon={<SearchFilled color="#dfdfdf" />}
-          onChange={handleSearchChange}
-          placeholder="Cari barang . . ."
-          size="md"
-          className="w-96"
-        />
       </Group>
       <Grid className="" gutter={32}>
         {catalogList
@@ -112,15 +98,33 @@ const Catalog: React.FC<ICatalog> = ({}) => {
             );
           })}
       </Grid>
-      <Group className="gap-0 self-center">
+      <Group className="gap-0 self-center mt-4">
         <Pagination
-          color={"red"}
+          color={"dark-red"}
           onChange={(e) => {
             setActivePage(e);
           }}
           total={pageAmt}
           disabled={pageAmt == 0}
           withEdges
+          styles={{
+            control: {
+              color: theme.colors["primary-text"][5],
+              borderRadius: "999px",
+              padding: "16px",
+              border: "2px solid #d4d3e7",
+              fontFamily: "poppins",
+              // backgroundColor: theme.colors['white'][5],
+              ":active": {
+                color: theme.colors["white"][5] + " !important"
+              },
+              ":hover": {
+                backgroundColor: theme.colors["light-red"][5] + " !important",
+                border: "2px solid #FFFFFF",
+                color: theme.colors["white"][5]
+              }
+            }
+          }}
         />
       </Group>
     </Stack>

@@ -20,7 +20,10 @@ import {
 } from "@mantine/core";
 import { DatePickerInputProps, DatePickerInput } from "@mantine/dates";
 import { useState } from "react";
-import { IconCalendarLtrOutline, IconSearchOutlined } from "../assets/icons/Fluent";
+import {
+  IconCalendarLtrOutline,
+  IconSearchOutlined
+} from "../assets/icons/Fluent";
 
 export const getDefaultStyle = (
   isFocus: boolean,
@@ -53,7 +56,6 @@ export const getDefaultStyle = (
   };
 };
 
-
 export const getDefaultStyleSearch = (
   isFocus: boolean,
   isError: boolean
@@ -68,21 +70,28 @@ export const getDefaultStyleSearch = (
     : theme.colors["secondary-text"][5];
   return {
     input: {
-      borderWidth: "0px",
+      borderWidth: "2px",
       borderRadius: "9999px",
-      padding: "22px",
+      padding: "20px",
+      borderColor: theme.colors["secondary-text"][5],
       color,
       // fontWeight: 400,
       fontFamily: "poppins",
       letterSpacing: "0.01em",
-      backgroundColor: theme.colors['secondary'][5],
-      fontSize: "16px"
+      backgroundColor: theme.colors["white"][5],
+      fontSize: "16px",
+      ":active": {
+        borderColor: theme.colors["primary-text"][5]
+      },
+      ":focus": {
+        borderColor: theme.colors["primary-text"][5]
+      },
     },
     label: {
       fontWeight: 800,
       color
     },
-    icon:{
+    icon: {
       paddingLeft: "6px"
     }
   };
@@ -228,7 +237,6 @@ export const MyDatePickerInput = ({
   );
 };
 
-
 export const MySearchInput = ({
   onFocus,
   onBlur,
@@ -242,7 +250,10 @@ export const MySearchInput = ({
       <MantineTextInput
         styles={{ ...getDefaultStyleSearch(isFocus, !!props.error) }}
         icon={
-          <IconSearchOutlined size={22} color={theme.colors["secondary-text"][9]} />
+          <IconSearchOutlined
+            size={22}
+            color={theme.colors["primary-text"][5]}
+          />
         }
         onFocus={(e) => {
           setIsFocus(true);
