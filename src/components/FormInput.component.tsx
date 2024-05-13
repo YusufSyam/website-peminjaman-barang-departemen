@@ -18,7 +18,12 @@ import {
   PasswordInputProps,
   PasswordInput
 } from "@mantine/core";
-import { DatePickerInputProps, DatePickerInput } from "@mantine/dates";
+import {
+  DatePickerInputProps,
+  DatePickerInput,
+  DateTimePickerProps,
+  DateTimePicker
+} from "@mantine/dates";
 import { useState } from "react";
 import {
   IconCalendarLtrOutline,
@@ -133,8 +138,7 @@ export const getDefaultStyleDatePickerInput = (
       letterSpacing: "0.01em",
       ":disabled": {
         color
-      },
-      
+      }
     },
     label: {
       fontWeight: 600,
@@ -143,7 +147,7 @@ export const getDefaultStyleDatePickerInput = (
     icon: {
       paddingLeft: "6px",
       color: "white"
-    },
+    }
   };
 };
 
@@ -236,7 +240,43 @@ export const MyDatePickerInput = ({
     <DatePickerInput
       size="md"
       styles={{ ...getDefaultStyleDatePickerInput(isFocus, !!props.error) }}
-      icon={<IconCalendarLtrOutline color={theme.colors["white"][5]} className={`self-center`} />}
+      icon={
+        <IconCalendarLtrOutline
+          color={theme.colors["white"][5]}
+          className={`self-center`}
+        />
+      }
+      onFocus={(e) => {
+        setIsFocus(true);
+        if (!!onFocus) onFocus(e);
+      }}
+      onBlur={(e) => {
+        setIsFocus(false);
+        if (!!onBlur) onBlur(e);
+      }}
+      {...props}
+    />
+  );
+};
+
+export const MyDateTimePickerInput = ({
+  onFocus,
+  onBlur,
+  ...props
+}: DateTimePickerProps) => {
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+  const theme = useMantineTheme();
+  return (
+    <DateTimePicker
+      placeholder={"Masukkan Tanggal"}
+      dropdownType="modal"
+      valueFormat="DD MMM YYYY hh:mm A"
+      locale="id"
+      clearable
+      onPointerEnterCapture={undefined}
+      onPointerLeaveCapture={undefined}
+      size="md"
+      styles={{ ...getDefaultStyle(isFocus, !!props.error) }}
       onFocus={(e) => {
         setIsFocus(true);
         if (!!onFocus) onFocus(e);

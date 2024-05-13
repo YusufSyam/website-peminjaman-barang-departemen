@@ -17,7 +17,8 @@ import {
   qfAddItem,
   qfDeleteItem,
   qfEditItem,
-  qfFetchAllItems
+  qfFetchAllItems,
+  qfLentItem
 } from "../../../utils/query/item-query";
 import AddNewCatalogModal from "./AddNewCatalogModal.component";
 import CatalogItem, { ICatalogItem } from "./CatalogItem.component";
@@ -61,6 +62,12 @@ const Catalog: React.FC<ICatalog> = ({}) => {
   });
 
   const postAddItemMutation = useMutation("post-add-item", qfAddItem, {
+    onSuccess() {
+      refetch();
+    }
+  });
+
+  const postLentItemMutation = useMutation("post-lent-item", qfLentItem, {
     onSuccess() {
       refetch();
     }
@@ -139,7 +146,6 @@ const Catalog: React.FC<ICatalog> = ({}) => {
 
     setCatalogList(tempCatalogList);
   }, [query]);
-
   return (
     <Stack>
       <AddNewCatalogModal
@@ -175,7 +181,7 @@ const Catalog: React.FC<ICatalog> = ({}) => {
           </Button>
         </Group>
       </Group>
-      {isFetching || isRefetching ? (
+      {isFetching ? (
         <Loading />
       ) : (
         <>
@@ -192,6 +198,7 @@ const Catalog: React.FC<ICatalog> = ({}) => {
                       {...item}
                       deleteItemMutation={deleteItemMutation}
                       putEditItemMutation={putEditItemMutation}
+                      postLentItemMutation={postLentItemMutation}
                     />
                   </Grid.Col>
                 );
@@ -233,7 +240,8 @@ const Catalog: React.FC<ICatalog> = ({}) => {
         opened={
           postAddItemMutation.isLoading ||
           putEditItemMutation.isLoading ||
-          deleteItemMutation.isLoading
+          deleteItemMutation.isLoading ||
+          postLentItemMutation.isLoading
         }
       />
     </Stack>

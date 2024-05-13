@@ -13,6 +13,8 @@ import WarningModal from "../../../components/WarningModal.component";
 import EditNewCatalogModal from "./EditNewCatalogModal.component";
 import { UseMutationResult } from "react-query";
 import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
+import LentItemModal from "./LentItemModal.component";
+import { ILentItem } from "./CatalogItemInputInterfaces.interface";
 
 export interface ICatalogItemDetailModal {
   opened: boolean;
@@ -24,6 +26,7 @@ export interface ICatalogItemDetailModal {
   description: string;
   putEditItemMutation?: UseMutationResult<any, unknown, IEditItem, unknown>;
   deleteItemMutation?: UseMutationResult<any, unknown, string, unknown>;
+  postLentItemMutation?: UseMutationResult<any, unknown, ILentItem, unknown>;
   itemId: string;
 }
 
@@ -37,7 +40,8 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
   description = "-",
   putEditItemMutation,
   deleteItemMutation,
-  itemId
+  itemId,
+  postLentItemMutation
 }) => {
   const isAvailable = borrowed < stock;
   const theme = useMantineTheme();
@@ -55,6 +59,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
 
   const [openedDelete, setOpenedDelete] = useState(false);
   const [openedEdit, setOpenedEdit] = useState(false);
+  const [openedLentItem, setOpenedLentItem] = useState(false);
   return (
     <>
       <MyModal
@@ -162,6 +167,9 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                 <Button
                   size="md"
                   className="rounded-full bg-red hover:bg-light-red duration-200 w-full"
+                  onClick={() => {
+                    setOpenedLentItem(true);
+                  }}
                 >
                   Pinjam
                 </Button>
@@ -178,6 +186,12 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
         image={image}
         stock={stock}
         description={description}
+        itemId={itemId}
+      />
+      <LentItemModal
+        opened={openedLentItem}
+        setOpened={setOpenedLentItem}
+        postLentItemMutation={postLentItemMutation}
         itemId={itemId}
       />
       <WarningModal

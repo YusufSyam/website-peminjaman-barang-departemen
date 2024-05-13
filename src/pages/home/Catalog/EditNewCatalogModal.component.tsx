@@ -10,7 +10,7 @@ import MyModal from "../../../components/MyModal.component";
 import {
   AddNewCatalogItemSchema,
   IEditCatalogItemInterfaces
-} from "./AddNewCatalogItemInterfaces.interface";
+} from "./CatalogItemInputInterfaces.interface";
 import { useForm, yupResolver } from "@mantine/form";
 import { UseMutationResult } from "react-query";
 import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";

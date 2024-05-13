@@ -1,4 +1,5 @@
-import { BASE_URL } from "../const/api";
+import { ILentItem } from "../../pages/home/Catalog/CatalogItemInputInterfaces.interface";
+import { BASE_URL, getTokenAuthorizationHeader } from "../const/api";
 import { ParseFileBase64 } from "../function/misc.function";
 
 const endpoint = `${BASE_URL}/items`;
@@ -19,10 +20,7 @@ export async function qfAddItem({
   const response = await fetch(`${endpoint}`, {
     method: "POST",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTFhNjY3Ny1iNzY3LTRjOWMtYTc2Ny0yNjBhODhlN2NlNjEiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzE1MzUyMDU1LCJleHAiOjE3MTc5NDQwNTUsImlzcyI6ImFwaS5qaiIsInN1YiI6ImFkbWluIn0.p6OSEYA0bY6KZHWWoH92X6qv8ZzoqgtN4L8gjLfulVU",
-      "Content-Type": "application/json"
+      ...getTokenAuthorizationHeader()
     },
     mode: "cors",
     credentials: "same-origin",
@@ -46,14 +44,11 @@ export interface IEditItem {
   values: IAddNewItem;
 }
 
-export async function qfEditItem({itemId, values}:IEditItem) {
+export async function qfEditItem({ itemId, values }: IEditItem) {
   const response = await fetch(`${endpoint}/${itemId}`, {
     method: "PUT",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTFhNjY3Ny1iNzY3LTRjOWMtYTc2Ny0yNjBhODhlN2NlNjEiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzE1MzUyMDU1LCJleHAiOjE3MTc5NDQwNTUsImlzcyI6ImFwaS5qaiIsInN1YiI6ImFkbWluIn0.p6OSEYA0bY6KZHWWoH92X6qv8ZzoqgtN4L8gjLfulVU",
-      "Content-Type": "application/json"
+      ...getTokenAuthorizationHeader()
     },
     mode: "cors",
     credentials: "same-origin",
@@ -71,10 +66,7 @@ export async function qfDeleteItem(itemId: string) {
   const response = await fetch(`${endpoint}/${itemId}`, {
     method: "DELETE",
     headers: {
-      Authorization:
-        "Bearer " +
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTFhNjY3Ny1iNzY3LTRjOWMtYTc2Ny0yNjBhODhlN2NlNjEiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzE1MzUyMDU1LCJleHAiOjE3MTc5NDQwNTUsImlzcyI6ImFwaS5qaiIsInN1YiI6ImFkbWluIn0.p6OSEYA0bY6KZHWWoH92X6qv8ZzoqgtN4L8gjLfulVU",
-      "Content-Type": "application/json"
+      ...getTokenAuthorizationHeader()
     }
   });
 
@@ -90,4 +82,29 @@ export async function qfFetchAllItems() {
     throw new Error("Error");
   }
   return response.json();
+}
+
+export async function qfLentItem(values: ILentItem) {
+  const response = await fetch(`${endpoint}/lent-items`, {
+    method: "POST",
+    headers: {
+      ...getTokenAuthorizationHeader()
+    },
+    mode: "cors",
+    credentials: "same-origin",
+    body: JSON.stringify({
+      lendStartTime: values?.lendStartTime?.getTime(),
+      lendEndTime: values?.lendEndTime?.getTime(),
+      itemId: values?.itemId,
+      studentId: values?.studentId,
+      description: values?.description,
+      roomName: values?.roomName
+    })
+  });
+
+  const data = await response.json();
+
+  console.log("INI RESPONSE", data);
+
+  return data;
 }

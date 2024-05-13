@@ -14,6 +14,15 @@ export interface IEditCatalogItemInterfaces {
   thumbnail: File;
 }
 
+export interface ILentItem {
+  lendStartTime: Date;
+  lendEndTime: Date;
+  itemId: string;
+  studentId: string;
+  description: string;
+  roomName: string;
+}
+
 export const AddNewCatalogItemSchema = yup.object({
   itemName: yup.string().required('Input nama barang terlebih dahulu'),
   stock: yup.number().required("Input berapa total barang terlebih dahulu"),
@@ -22,6 +31,15 @@ export const AddNewCatalogItemSchema = yup.object({
       name: yup.string().required("Input file gambar  terlebih dahulu")
     })
     .nullable()
+});
+
+export const LentItemSchema = yup.object({
+  itemId: yup.string().required('Input field terlebih dahulu'),
+  studentId: yup.string().required('Input field terlebih dahulu'),
+  description: yup.string().required('Input field terlebih dahulu'),
+  roomName: yup.string().required('Input field terlebih dahulu'),
+  lendStartTime: yup.number().required("Input field terlebih dahulu"),
+  lendEndTime: yup.number().required("Input field terlebih dahulu"),
 });
 
 export const EditCatalogItemSchema = yup.object({

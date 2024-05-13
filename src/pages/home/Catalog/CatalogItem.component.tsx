@@ -20,6 +20,7 @@ import EditNewCatalogModal from "./EditNewCatalogModal.component";
 import CatalogItemDetailModal from "./CatalogItemDetailModal.component";
 import { UseMutationResult } from "react-query";
 import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
+import { ILentItem } from "./CatalogItemInputInterfaces.interface";
 
 export interface ICatalogItem {
   itemId?: string;
@@ -30,6 +31,7 @@ export interface ICatalogItem {
   description: string;
   putEditItemMutation?: UseMutationResult<any, unknown, IEditItem, unknown>;
   deleteItemMutation?: UseMutationResult<any, unknown, string, unknown>;
+  postLentItemMutation?: UseMutationResult<any, unknown, ILentItem, unknown>;
 }
 
 const CatalogItem: React.FC<ICatalogItem> = ({
@@ -40,7 +42,8 @@ const CatalogItem: React.FC<ICatalogItem> = ({
   itemId,
   description,
   putEditItemMutation,
-  deleteItemMutation
+  deleteItemMutation,
+  postLentItemMutation
 }) => {
   const theme = useMantineTheme();
   const isAvailable = borrowed < stock;
@@ -60,6 +63,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
         description={description}
         deleteItemMutation={deleteItemMutation}
         putEditItemMutation={putEditItemMutation}
+        postLentItemMutation={postLentItemMutation}
       />
       <div
         className={`p-2 rounded-[24px] mb-4 hover:shadow-2xl shadow-xl duration-200 cursor-pointer

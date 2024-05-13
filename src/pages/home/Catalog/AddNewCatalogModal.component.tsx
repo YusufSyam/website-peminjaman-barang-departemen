@@ -10,7 +10,7 @@ import MyModal from "../../../components/MyModal.component";
 import {
   AddNewCatalogItemSchema,
   IAddNewCatalogItemInterfaces
-} from "./AddNewCatalogItemInterfaces.interface";
+} from "./CatalogItemInputInterfaces.interface";
 import { useForm, yupResolver } from "@mantine/form";
 import instance from "../../../utils/http";
 import { UseMutationResult, useMutation } from "react-query";
@@ -104,6 +104,7 @@ const AddNewCatalogModal: React.FC<IAddNewCatalogModal> = ({
           {...getInputProps("itemName")}
           error={errors["itemName" as keyof IAddNewCatalogItemInterfaces]}
           defaultValue={""}
+          required
         />
         <MyNumberInput
           label="Stok Barang"
@@ -113,6 +114,7 @@ const AddNewCatalogModal: React.FC<IAddNewCatalogModal> = ({
           error={errors["stock" as keyof IAddNewCatalogItemInterfaces]}
           defaultValue={""}
           min={0}
+          required
         />
         <MyTextInput
           label="Deskripsi"
