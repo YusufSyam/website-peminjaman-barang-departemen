@@ -8,7 +8,7 @@ export interface IAddNewCatalogItemInterfaces {
 }
 
 export const AddNewCatalogItemSchema = yup.object({
-  roadName: yup.string().required('Input nama barang terlebih dahulu'),
+  itemName: yup.string().required('Input nama barang terlebih dahulu'),
   stock: yup.number().required("Input berapa total barang terlebih dahulu"),
   image: yup
     .object({

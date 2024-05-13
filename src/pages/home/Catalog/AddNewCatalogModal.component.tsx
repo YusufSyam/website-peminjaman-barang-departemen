@@ -12,6 +12,9 @@ import {
   IAddNewCatalogItemInterfaces
 } from "./AddNewCatalogItemInterfaces.interface";
 import { useForm, yupResolver } from "@mantine/form";
+import instance from "../../../utils/http";
+import { useMutation } from "react-query";
+import { qfAddItem } from "../../../utils/query/item-query";
 
 export interface IAddNewCatalogModal {
   opened: boolean;
@@ -26,6 +29,20 @@ const AddNewCatalogModal: React.FC<IAddNewCatalogModal> = ({
     validate: yupResolver(AddNewCatalogItemSchema)
   });
 
+  const postAddItemMutation = useMutation(
+    "post-add-item",
+    qfAddItem
+  );
+
+  function handleAddCatalogItem(){
+    console.log(values, 'values')
+    postAddItemMutation.mutate({
+      name: values.itemName,
+      description: values.description,
+      stock: values.stock
+    })
+  }
+
   const {
     getInputProps,
     errors,
@@ -37,9 +54,21 @@ const AddNewCatalogModal: React.FC<IAddNewCatalogModal> = ({
     onSubmit
   } = form;
 
-  function handleAddCatalogItem() {
-    setOpened(false);
-  }
+  // async function handleAddCatalogItem() {
+  //       try {
+  //           const addItemResponse = await instance.post('/api/items', {
+  //             name: values.itemName , description: values.description, stock: values.stock
+  //           }, {
+  //               headers: {
+  //                   Authorization: 'Bearer ' + "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTFhNjY3Ny1iNzY3LTRjOWMtYTc2Ny0yNjBhODhlN2NlNjEiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzE1MzUyMDU1LCJleHAiOjE3MTc5NDQwNTUsImlzcyI6ImFwaS5qaiIsInN1YiI6ImFkbWluIn0.p6OSEYA0bY6KZHWWoH92X6qv8ZzoqgtN4L8gjLfulVU",
+  //                   'Content-Type': 'application/json',
+  //               },
+  //           });
+  //       } catch (error) {
+  //           console.error('Error submitting form:', error);
+  //       }
+  //     setOpened(false);
+  // }
 
   useEffect(() => {
     if (!opened) {

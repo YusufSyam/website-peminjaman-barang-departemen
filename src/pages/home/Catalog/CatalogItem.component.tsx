@@ -20,17 +20,21 @@ import EditNewCatalogModal from "./EditNewCatalogModal.component";
 import CatalogItemDetailModal from "./CatalogItemDetailModal.component";
 
 export interface ICatalogItem {
+  itemId?: string;
   label?: string;
   stock?: number;
   borrowed?: number;
   image?: string;
+  description: string;
 }
 
 const CatalogItem: React.FC<ICatalogItem> = ({
   label = "Kamera",
   stock = 11,
   borrowed=5,
-  image = noItem
+  image = noItem,
+  itemId,
+  description
 }) => {
   const theme = useMantineTheme();
   const isAvailable = borrowed<stock;
@@ -43,32 +47,35 @@ const CatalogItem: React.FC<ICatalogItem> = ({
         opened={opened}
         setOpened={setOpened}
         label={label}
-        image={image}
+        image={image==""? noItem : image}
         stock={stock}
         borrowed={borrowed}
+        description={description}
       />
       <div
-        className={`p-2 rounded-[40px] mb-4 hover:shadow-2xl shadow-xl duration-200 cursor-pointer
-          ${
-            isAvailable
-              ? `bg-green hover:bg-light-green `
-              : `bg-red hover:bg-light-red `
-          }`}
+        className={`p-2 rounded-[24px] mb-4 hover:shadow-2xl shadow-xl duration-200 cursor-pointer
+        bg-white border-2 
+        ${
+          isAvailable
+            ? `border-secondary-text/75 `
+            : `border-secondary-text/75 `
+        }
+        `}
       >
         <Stack
           onClick={() => {
             setOpened(true);
           }}
-          className="w-full rounded-[34px] overflow-hidden gap-0 "
+          className="w-full rounded-[16px] overflow-hidden gap-0 "
         >
-          <div className="w-full h-[200px] overflow-hidden rounded-[34px] p-1 bg-white">
+          <div className="w-full h-[200px] overflow-hidden rounded-[16px] p-1 bg-white ">
             <img
-              src={image}
+              src={image==""? noItem : image}
               alt="Gambar Item"
-              className="w-full h-full object-cover rounded-[30px]"
+              className="w-full h-full object-cover rounded-[16px]"
             />
           </div>
-          <Group className="mt-4 mb-2 mx-1 py-2 px-4 bg-white rounded-3xl justify-between">
+          <Group className="mt-4 mb-2 mx-1 py-2 px-4 bg-white rounded-3xl justify-between border border-secondary-text hover:bg-secondary/70 duration-200">
             <Stack className="gap-0  ">
               <Text className="text-start font-poppins text-primary-text">
                 {label}

@@ -19,7 +19,7 @@ const Jumbotron: React.FC<IJumbotron> = ({}) => {
               </Text>
               <Text className="text-white font-poppins text-[18px] text-start pb-4 border-b-2 border-white">
                 di{" "}
-                <span className="text-yellow font-poppins-semibold">
+                <span className="text-yellow font-poppins-semibold text-[20px]">
                   Layanan Peminjaman Inventaris
                 </span>{" "}
                 Departemen Matematika

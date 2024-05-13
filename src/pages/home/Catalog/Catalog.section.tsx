@@ -17,14 +17,47 @@ import {
   MySearchInput,
   MyTextInput
 } from "../../../components/FormInput.component";
+import instance from "../../../utils/http";
+import { qfFetchAllItems } from "../../../utils/query/item-query";
+import { useQuery } from "react-query";
 
 export interface ICatalog {}
+
+function formatCatalogItem(beData: any[] = []) {
+  const formatted = beData?.map((d) => {
+    const data: ICatalogItem = {
+      itemId: d?.itemId,
+      label: d?.name,
+      stock: d?.stock,
+      borrowed: d?.totalItem - d?.stock,
+      image: d?.thumbnail,
+      description: d?.description
+    };
+
+    return data;
+  });
+
+  return formatted;
+}
 
 const Catalog: React.FC<ICatalog> = ({}) => {
   const theme = useMantineTheme();
 
-  const [catalogList, setCatalogList] =
-    useState<Array<ICatalogItem>>(dummyCatalogList);
+  const { data, isLoading, isError, error, refetch, isSuccess, isRefetching } =
+    useQuery(`fetch-all-items`, qfFetchAllItems
+    // , {
+    //   onSuccess(data) {
+    //     const formattedData = formatCatalogItem(data?.data);
+
+    //     setCatalogList(formattedData);
+    //   }
+    // }
+    );
+
+  console.log(data, "data");
+
+  const formattedData = formatCatalogItem(data?.data || [])
+  const [catalogList, setCatalogList] = useState<Array<ICatalogItem>>(formattedData);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [query] = useDebouncedValue(searchTerm, 500);
@@ -45,7 +78,28 @@ const Catalog: React.FC<ICatalog> = ({}) => {
   }, [catalogList]);
 
   useEffect(() => {
-    const tempCatalogList = dummyCatalogList?.filter((d: ICatalogItem) =>
+    // const fetchData = async () => {
+    //   try {
+    //       // Fetch data from the API using Axios and the fieldId from the URL
+    //       const response = await instance.get(`/api/items`);
+    //       const data = response.data;
+
+    //       // Set the fetched data in the state
+    //       // setCatalogList(data.data);
+    //       console.log(data.data);
+    //       setCatalogList(data.data.map((i: any) => ({
+    //         label: i.name,
+    //         stock: i.totalItem,
+    //         description: i.description,
+    //         borrowed: i.totalItem - i.stock
+    //       })));
+    //   } catch (error) {
+    //       console.error('Error fetching data:', error);
+    //   }
+
+    // }
+    // fetchData()
+    const tempCatalogList = formattedData?.filter((d: ICatalogItem) =>
       d?.label?.toLowerCase()?.includes(query?.toLowerCase())
     );
 

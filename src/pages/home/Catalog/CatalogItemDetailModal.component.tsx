@@ -19,6 +19,7 @@ export interface ICatalogItemDetailModal {
   image: string;
   stock: number;
   borrowed: number;
+  description: string;
 }
 
 const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
@@ -27,7 +28,8 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
   label,
   image,
   borrowed,
-  stock
+  stock,
+  description= "-"
 }) => {
   const isAvailable = borrowed < stock;
   const theme = useMantineTheme();
@@ -110,9 +112,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                 Deskripsi Barang
               </Text>
               <Text className="text-primary-text text-justify">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. In
-                dolore porro pariatur quod, distinctio saepe error fugiat
-                voluptatum molestiae dolorum. lorem1000
+                {description}
               </Text>
             </Stack>
             <Grid className="absolute bottom-0 right-0 left-[422px]">
