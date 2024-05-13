@@ -19,6 +19,7 @@ import WarningModal from "../../../components/WarningModal.component";
 import EditNewCatalogModal from "./EditNewCatalogModal.component";
 import CatalogItemDetailModal from "./CatalogItemDetailModal.component";
 import { UseMutationResult } from "react-query";
+import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
 
 export interface ICatalogItem {
   itemId?: string;
@@ -27,6 +28,7 @@ export interface ICatalogItem {
   borrowed?: number;
   image?: string;
   description: string;
+  putEditItemMutation?: UseMutationResult<any, unknown, IEditItem, unknown>;
   deleteItemMutation?: UseMutationResult<any, unknown, string, unknown>;
 }
 
@@ -37,6 +39,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
   image = noItem,
   itemId,
   description,
+  putEditItemMutation,
   deleteItemMutation
 }) => {
   const theme = useMantineTheme();
@@ -56,6 +59,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
         borrowed={borrowed}
         description={description}
         deleteItemMutation={deleteItemMutation}
+        putEditItemMutation={putEditItemMutation}
       />
       <div
         className={`p-2 rounded-[24px] mb-4 hover:shadow-2xl shadow-xl duration-200 cursor-pointer

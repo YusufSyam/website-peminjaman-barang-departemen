@@ -41,6 +41,32 @@ export async function qfAddItem({
   return data;
 }
 
+export interface IEditItem {
+  itemId: string;
+  values: IAddNewItem;
+}
+
+export async function qfEditItem({itemId, values}:IEditItem) {
+  const response = await fetch(`${endpoint}/${itemId}`, {
+    method: "PUT",
+    headers: {
+      Authorization:
+        "Bearer " +
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIwMTFhNjY3Ny1iNzY3LTRjOWMtYTc2Ny0yNjBhODhlN2NlNjEiLCJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNzE1MzUyMDU1LCJleHAiOjE3MTc5NDQwNTUsImlzcyI6ImFwaS5qaiIsInN1YiI6ImFkbWluIn0.p6OSEYA0bY6KZHWWoH92X6qv8ZzoqgtN4L8gjLfulVU",
+      "Content-Type": "application/json"
+    },
+    mode: "cors",
+    credentials: "same-origin",
+    body: JSON.stringify(values)
+  });
+
+  const data = await response.json();
+
+  console.log("INI RESPONSE", data);
+
+  return data;
+}
+
 export async function qfDeleteItem(itemId: string) {
   const response = await fetch(`${endpoint}/${itemId}`, {
     method: "DELETE",

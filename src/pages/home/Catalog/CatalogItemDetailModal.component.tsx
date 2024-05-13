@@ -12,6 +12,7 @@ import MyModal from "../../../components/MyModal.component";
 import WarningModal from "../../../components/WarningModal.component";
 import EditNewCatalogModal from "./EditNewCatalogModal.component";
 import { UseMutationResult } from "react-query";
+import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
 
 export interface ICatalogItemDetailModal {
   opened: boolean;
@@ -21,6 +22,7 @@ export interface ICatalogItemDetailModal {
   stock: number;
   borrowed: number;
   description: string;
+  putEditItemMutation?: UseMutationResult<any, unknown, IEditItem, unknown>;
   deleteItemMutation?: UseMutationResult<any, unknown, string, unknown>;
   itemId: string;
 }
@@ -33,6 +35,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
   borrowed,
   stock,
   description = "-",
+  putEditItemMutation,
   deleteItemMutation,
   itemId
 }) => {
@@ -167,7 +170,16 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
           </Stack>
         </Group>
       </MyModal>
-      <EditNewCatalogModal opened={openedEdit} setOpened={setOpenedEdit} />
+      <EditNewCatalogModal
+        opened={openedEdit}
+        setOpened={setOpenedEdit}
+        putEditItemMutation={putEditItemMutation}
+        label={label}
+        image={image}
+        stock={stock}
+        description={description}
+        itemId={itemId}
+      />
       <WarningModal
         opened={openedDelete}
         setOpened={setOpenedDelete}

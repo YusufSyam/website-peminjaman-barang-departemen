@@ -7,6 +7,13 @@ export interface IAddNewCatalogItemInterfaces {
   image: File;
 }
 
+export interface IEditCatalogItemInterfaces {
+  name: string;
+  stock: number;
+  description: string;
+  thumbnail: File;
+}
+
 export const AddNewCatalogItemSchema = yup.object({
   itemName: yup.string().required('Input nama barang terlebih dahulu'),
   stock: yup.number().required("Input berapa total barang terlebih dahulu"),
@@ -18,7 +25,7 @@ export const AddNewCatalogItemSchema = yup.object({
 });
 
 export const EditCatalogItemSchema = yup.object({
-  roadName: yup.string().required('Input nama barang terlebih dahulu'),
+  itemName: yup.string().required('Input nama barang terlebih dahulu'),
   stock: yup.number().required("Input berapa total barang terlebih dahulu"),
   image: yup
     .object({

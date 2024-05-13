@@ -9,20 +9,34 @@ import {
 import MyModal from "../../../components/MyModal.component";
 import {
   AddNewCatalogItemSchema,
-  IAddNewCatalogItemInterfaces
+  IEditCatalogItemInterfaces
 } from "./AddNewCatalogItemInterfaces.interface";
 import { useForm, yupResolver } from "@mantine/form";
+import { UseMutationResult } from "react-query";
+import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
 
 export interface IEditNewCatalogModal {
   opened: boolean;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  putEditItemMutation?: UseMutationResult<any, unknown, IEditItem, unknown>;
+  label: string;
+  image: string;
+  stock: number;
+  description: string;
+  itemId: string;
 }
 
 const EditNewCatalogModal: React.FC<IEditNewCatalogModal> = ({
   opened,
-  setOpened
+  setOpened,
+  putEditItemMutation,
+  description,
+  image,
+  itemId,
+  label,
+  stock
 }) => {
-  const form = useForm<IAddNewCatalogItemInterfaces>({
+  const form = useForm<IEditCatalogItemInterfaces>({
     validate: yupResolver(AddNewCatalogItemSchema)
   });
 
@@ -37,28 +51,22 @@ const EditNewCatalogModal: React.FC<IEditNewCatalogModal> = ({
     onSubmit
   } = form;
 
-  function handleAddCatalogItem() {
-    setOpened(false);
+  function handleEditCatalogItem() {
+    putEditItemMutation?.mutate({ itemId: itemId, values:values });
+    console.log("DDDDDDDDDDDDDDD", values);
   }
+
+  useEffect(() => {
+    if (putEditItemMutation?.isSuccess) {
+      setOpened(false);
+    }
+  }, [putEditItemMutation?.isSuccess]);
 
   useEffect(() => {
     if (!opened) {
       reset();
     }
   }, [opened]);
-
-  console.log(values, "values");
-  console.log(values?.itemName?.length > 1, "values?.itemName?.length");
-  console.log(
-    values?.image == null,
-    values?.itemName == null,
-    values?.itemName == "",
-    values?.stock == null,
-    typeof values?.stock == "string",
-    `values?.image == null ||
-    values?.itemName == null  || values?.itemName != "" ||
-    values?.stock == null  || typeof values?.stock == "string"`
-  );
   return (
     <MyModal
       opened={opened}
@@ -72,17 +80,17 @@ const EditNewCatalogModal: React.FC<IEditNewCatalogModal> = ({
           label="Nama Barang"
           size="md"
           placeholder="Masukkan Nama Barang"
-          {...getInputProps("itemName")}
-          error={errors["itemName" as keyof IAddNewCatalogItemInterfaces]}
-          defaultValue={""}
+          {...getInputProps("name")}
+          error={errors["name" as keyof IEditCatalogItemInterfaces]}
+          defaultValue={label}
         />
         <MyNumberInput
           label="Stok Barang"
           size="md"
           placeholder="Masukkan Jumlah Stok Barang"
           {...getInputProps("stock")}
-          error={errors["stock" as keyof IAddNewCatalogItemInterfaces]}
-          defaultValue={""}
+          error={errors["stock" as keyof IEditCatalogItemInterfaces]}
+          defaultValue={stock}
           min={0}
         />
         <MyTextInput
@@ -90,32 +98,33 @@ const EditNewCatalogModal: React.FC<IEditNewCatalogModal> = ({
           size="md"
           placeholder="Masukkan Deskripsi Barang"
           {...getInputProps("description")}
-          error={errors["description" as keyof IAddNewCatalogItemInterfaces]}
-          defaultValue={""}
+          error={errors["description" as keyof IEditCatalogItemInterfaces]}
+          defaultValue={description}
         />
+        
         <DocumentInput
           withDelete
-          {...getInputProps("image")}
+          {...getInputProps("thumbnail")}
           required
           accept={[MIME_TYPES.png, MIME_TYPES.jpeg, MIME_TYPES.mp4]}
           label="Gambar Barang"
           placeholder="Seret dan tempatkan file, atau klik untuk memilih file."
           description="Ekstensi file png, jpeg atau mp4. Ukuran file maksimal 100 MB."
           error={
-            errors[`${"image" as keyof IAddNewCatalogItemInterfaces}.name`]
+            errors[`${"thumbnail" as keyof IEditCatalogItemInterfaces}.name`]
           }
           maxSize={100_000_000}
         />
         <Button
-          onClick={handleAddCatalogItem}
+          onClick={handleEditCatalogItem}
           className="bg-green hover:bg-light-green rounded-full duration-100"
-          disabled={
-            values?.image == null ||
-            values?.itemName == null ||
-            values?.itemName == "" ||
-            values?.stock == null ||
-            typeof values?.stock == "string"
-          }
+          // disabled={
+          //   values?.image == null ||
+          //   values?.itemName == null ||
+          //   values?.itemName == "" ||
+          //   values?.stock == null ||
+          //   typeof values?.stock == "string"
+          // }
         >
           Edit
         </Button>

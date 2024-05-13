@@ -9,18 +9,19 @@ import {
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import React, { useEffect, useState } from "react";
-import { IconAddFilled, SearchFilled } from "../../../assets/icons/Fluent";
-import { dummyCatalogList } from "../../../utils/const/dummy";
+import { useMutation, useQuery } from "react-query";
+import { IconAddFilled } from "../../../assets/icons/Fluent";
+import { MySearchInput } from "../../../components/FormInput.component";
+import Loading from "../../../components/Loading.component";
+import {
+  qfAddItem,
+  qfDeleteItem,
+  qfEditItem,
+  qfFetchAllItems
+} from "../../../utils/query/item-query";
 import AddNewCatalogModal from "./AddNewCatalogModal.component";
 import CatalogItem, { ICatalogItem } from "./CatalogItem.component";
-import {
-  MySearchInput,
-  MyTextInput
-} from "../../../components/FormInput.component";
-import instance from "../../../utils/http";
-import { qfAddItem, qfDeleteItem, qfFetchAllItems } from "../../../utils/query/item-query";
-import { useMutation, useQuery } from "react-query";
-import Loading from "../../../components/Loading.component";
+import LoadingModal from "../../../components/LoadingModal.component";
 
 export interface ICatalog {}
 
@@ -65,15 +66,17 @@ const Catalog: React.FC<ICatalog> = ({}) => {
     }
   });
 
-  const deleteItemMutation = useMutation(
-    "delete-Items",
-    qfDeleteItem,
-    {
-      onSuccess() {
-        refetch();
-      }
+  const putEditItemMutation = useMutation("put-edit-item", qfEditItem, {
+    onSuccess() {
+      refetch();
     }
-  );
+  });
+
+  const deleteItemMutation = useMutation("delete-Items", qfDeleteItem, {
+    onSuccess() {
+      refetch();
+    }
+  });
 
   console.log(data, "data");
 
@@ -172,7 +175,7 @@ const Catalog: React.FC<ICatalog> = ({}) => {
           </Button>
         </Group>
       </Group>
-      {isFetching || isRefetching || postAddItemMutation.isLoading ? (
+      {isFetching || isRefetching ? (
         <Loading />
       ) : (
         <>
@@ -185,7 +188,11 @@ const Catalog: React.FC<ICatalog> = ({}) => {
               ?.map((item: ICatalogItem, idx: number) => {
                 return (
                   <Grid.Col key={idx} span={3}>
-                    <CatalogItem {...item} deleteItemMutation={deleteItemMutation} />
+                    <CatalogItem
+                      {...item}
+                      deleteItemMutation={deleteItemMutation}
+                      putEditItemMutation={putEditItemMutation}
+                    />
                   </Grid.Col>
                 );
               })}
@@ -222,6 +229,13 @@ const Catalog: React.FC<ICatalog> = ({}) => {
           </Group>
         </>
       )}
+      <LoadingModal
+        opened={
+          postAddItemMutation.isLoading ||
+          putEditItemMutation.isLoading ||
+          deleteItemMutation.isLoading
+        }
+      />
     </Stack>
   );
 };
