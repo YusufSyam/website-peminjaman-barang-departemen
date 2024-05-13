@@ -18,8 +18,9 @@ import {
   MyTextInput
 } from "../../../components/FormInput.component";
 import instance from "../../../utils/http";
-import { qfFetchAllItems } from "../../../utils/query/item-query";
-import { useQuery } from "react-query";
+import { qfAddItem, qfDeleteItem, qfFetchAllItems } from "../../../utils/query/item-query";
+import { useMutation, useQuery } from "react-query";
+import Loading from "../../../components/Loading.component";
 
 export interface ICatalog {}
 
@@ -43,28 +44,54 @@ function formatCatalogItem(beData: any[] = []) {
 const Catalog: React.FC<ICatalog> = ({}) => {
   const theme = useMantineTheme();
 
-  const { data, isLoading, isError, error, refetch, isSuccess, isRefetching } =
-    useQuery(`fetch-all-items`, qfFetchAllItems
-    // , {
-    //   onSuccess(data) {
-    //     const formattedData = formatCatalogItem(data?.data);
+  const {
+    data,
+    isFetching,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isSuccess,
+    isRefetching
+  } = useQuery(`fetch-all-items`, qfFetchAllItems, {
+    onSuccess(data) {
+      setFormattedData(formatCatalogItem(data?.data || []));
+    }
+  });
 
-    //     setCatalogList(formattedData);
-    //   }
-    // }
-    );
+  const postAddItemMutation = useMutation("post-add-item", qfAddItem, {
+    onSuccess() {
+      refetch();
+    }
+  });
+
+  const deleteItemMutation = useMutation(
+    "delete-Items",
+    qfDeleteItem,
+    {
+      onSuccess() {
+        refetch();
+      }
+    }
+  );
 
   console.log(data, "data");
 
-  const formattedData = formatCatalogItem(data?.data || [])
-  const [catalogList, setCatalogList] = useState<Array<ICatalogItem>>(formattedData);
+  const [formattedData, setFormattedData] = useState(
+    formatCatalogItem(data?.data || [])
+  );
+  const [catalogList, setCatalogList] =
+    useState<Array<ICatalogItem>>(formattedData);
+  console.log("RRRRRRRRRRRRRRRRRRRRRRR data", data);
+  console.log("RRRRRRRRRRRRRRRRRRRRRRR formattedData", formattedData);
+  console.log("RRRRRRRRRRRRRRRRRRRRRRR catalogList", catalogList);
 
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [query] = useDebouncedValue(searchTerm, 500);
 
   const [activePage, setActivePage] = useState<number>(1);
   const [pageAmt, setPageAmt] = useState(0);
-  const dataPerPageAmt = 8;
+  const dataPerPageAmt = 20;
 
   const [openedAddItem, setOpenedAddItem] = useState(false);
 
@@ -76,6 +103,10 @@ const Catalog: React.FC<ICatalog> = ({}) => {
   useEffect(() => {
     setPageAmt(Math.round(catalogList?.length / dataPerPageAmt + 0.4));
   }, [catalogList]);
+
+  useEffect(() => {
+    setCatalogList(formattedData);
+  }, [formattedData]);
 
   useEffect(() => {
     // const fetchData = async () => {
@@ -108,7 +139,11 @@ const Catalog: React.FC<ICatalog> = ({}) => {
 
   return (
     <Stack>
-      <AddNewCatalogModal opened={openedAddItem} setOpened={setOpenedAddItem} />
+      <AddNewCatalogModal
+        opened={openedAddItem}
+        setOpened={setOpenedAddItem}
+        postAddItemMutation={postAddItemMutation}
+      />
       {/* <Group className=" mb-4 self-center"> */}
       <Group className="my-4 justify-between">
         <Text className="font-poppins-semibold text-primary-text text-[30px] ml-1">
@@ -137,49 +172,56 @@ const Catalog: React.FC<ICatalog> = ({}) => {
           </Button>
         </Group>
       </Group>
-      <Grid className="" gutter={32}>
-        {catalogList
-          ?.slice(
-            (activePage - 1) * dataPerPageAmt,
-            (activePage - 1) * dataPerPageAmt + dataPerPageAmt
-          )
-          ?.map((item: ICatalogItem, idx: number) => {
-            return (
-              <Grid.Col key={idx} span={3}>
-                <CatalogItem {...item} />
-              </Grid.Col>
-            );
-          })}
-      </Grid>
-      <Group className="gap-0 self-center mt-4">
-        <Pagination
-          color={"dark-red"}
-          onChange={(e) => {
-            setActivePage(e);
-          }}
-          total={pageAmt}
-          disabled={pageAmt == 0}
-          withEdges
-          styles={{
-            control: {
-              color: theme.colors["primary-text"][5],
-              borderRadius: "999px",
-              padding: "16px",
-              border: "2px solid #d4d3e7",
-              fontFamily: "poppins",
-              // backgroundColor: theme.colors['white'][5],
-              ":active": {
-                color: theme.colors["white"][5] + " !important"
-              },
-              ":hover": {
-                backgroundColor: theme.colors["light-red"][5] + " !important",
-                border: "2px solid #FFFFFF",
-                color: theme.colors["white"][5]
-              }
-            }
-          }}
-        />
-      </Group>
+      {isFetching || isRefetching || postAddItemMutation.isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <Grid className="" gutter={32}>
+            {catalogList
+              ?.slice(
+                (activePage - 1) * dataPerPageAmt,
+                (activePage - 1) * dataPerPageAmt + dataPerPageAmt
+              )
+              ?.map((item: ICatalogItem, idx: number) => {
+                return (
+                  <Grid.Col key={idx} span={3}>
+                    <CatalogItem {...item} deleteItemMutation={deleteItemMutation} />
+                  </Grid.Col>
+                );
+              })}
+          </Grid>
+          <Group className="gap-0 self-center mt-4">
+            <Pagination
+              color={"dark-red"}
+              onChange={(e) => {
+                setActivePage(e);
+              }}
+              total={pageAmt}
+              disabled={pageAmt == 0}
+              withEdges
+              styles={{
+                control: {
+                  color: theme.colors["primary-text"][5],
+                  borderRadius: "999px",
+                  padding: "16px",
+                  border: "2px solid #d4d3e7",
+                  fontFamily: "poppins",
+                  // backgroundColor: theme.colors['white'][5],
+                  ":active": {
+                    color: theme.colors["white"][5] + " !important"
+                  },
+                  ":hover": {
+                    backgroundColor:
+                      theme.colors["light-red"][5] + " !important",
+                    border: "2px solid #FFFFFF",
+                    color: theme.colors["white"][5]
+                  }
+                }
+              }}
+            />
+          </Group>
+        </>
+      )}
     </Stack>
   );
 };

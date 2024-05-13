@@ -6,11 +6,12 @@ import {
   Text,
   useMantineTheme
 } from "@mantine/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IconTrashFilled, IconEditFilled } from "../../../assets/icons/Fluent";
 import MyModal from "../../../components/MyModal.component";
 import WarningModal from "../../../components/WarningModal.component";
 import EditNewCatalogModal from "./EditNewCatalogModal.component";
+import { UseMutationResult } from "react-query";
 
 export interface ICatalogItemDetailModal {
   opened: boolean;
@@ -20,6 +21,8 @@ export interface ICatalogItemDetailModal {
   stock: number;
   borrowed: number;
   description: string;
+  deleteItemMutation?: UseMutationResult<any, unknown, string, unknown>;
+  itemId: string;
 }
 
 const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
@@ -29,10 +32,23 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
   image,
   borrowed,
   stock,
-  description= "-"
+  description = "-",
+  deleteItemMutation,
+  itemId
 }) => {
   const isAvailable = borrowed < stock;
   const theme = useMantineTheme();
+
+  function handleDeleteItem() {
+    deleteItemMutation?.mutate(itemId);
+  }
+
+  useEffect(() => {
+    if (deleteItemMutation?.isSuccess) {
+      setOpened(false);
+      setOpenedDelete(false);
+    }
+  }, [deleteItemMutation?.isSuccess]);
 
   const [openedDelete, setOpenedDelete] = useState(false);
   const [openedEdit, setOpenedEdit] = useState(false);
@@ -53,18 +69,20 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
           </div>
           <Stack className="self-start">
             <Stack className="gap-1">
-              <Text className="text-primary-text font-semibold text-xl">Status</Text>
+              <Text className="text-primary-text font-semibold text-xl">
+                Status
+              </Text>
               <Text
                 className={`
-              ${
-                isAvailable ? `text-green` : `text-red`
-              } font-poppins -mt-1`}
+              ${isAvailable ? `text-green` : `text-red`} font-poppins -mt-1`}
               >
                 {isAvailable ? "Tersedia" : "Tidak Tersedia"}
               </Text>
             </Stack>
             <Stack className="gap-0">
-              <Text className="text-primary-text font-semibold text-xl">Stok</Text>
+              <Text className="text-primary-text font-semibold text-xl">
+                Stok
+              </Text>
               <Group className="gap-10">
                 <Stack className="gap-2">
                   <Text className="text-secondary-text text-md font-semibold">
@@ -72,7 +90,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                   </Text>
                   <Group className="gap-1">
                     <Text className="bg-green px-2 py-[2px] rounded-xl text-white font-poppins text-2xl -mt-1">
-                      {stock-borrowed}
+                      {stock - borrowed}
                     </Text>
                     <Text className="text-primary-text font-poppins text-xl -mt-1">
                       Item
@@ -138,7 +156,10 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
               </Grid.Col>
 
               <Grid.Col span={9}>
-                <Button size="md" className="rounded-full bg-red hover:bg-light-red duration-200 w-full">
+                <Button
+                  size="md"
+                  className="rounded-full bg-red hover:bg-light-red duration-200 w-full"
+                >
                   Pinjam
                 </Button>
               </Grid.Col>
@@ -155,8 +176,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
         yesButtonLabel="Hapus"
         children={`Aksi ini akan menghapus barang dari katalog. Pastikan bahwa tidak ada peminjaman dari barang ini saat akan menghapus`}
         onSubmit={() => {
-          setOpened(false);
-          setOpenedDelete(false);
+          handleDeleteItem();
         }}
       />
     </>

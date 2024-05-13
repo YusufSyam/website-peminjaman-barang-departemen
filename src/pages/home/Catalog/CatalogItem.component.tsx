@@ -18,6 +18,7 @@ import MyModal from "../../../components/MyModal.component";
 import WarningModal from "../../../components/WarningModal.component";
 import EditNewCatalogModal from "./EditNewCatalogModal.component";
 import CatalogItemDetailModal from "./CatalogItemDetailModal.component";
+import { UseMutationResult } from "react-query";
 
 export interface ICatalogItem {
   itemId?: string;
@@ -26,31 +27,35 @@ export interface ICatalogItem {
   borrowed?: number;
   image?: string;
   description: string;
+  deleteItemMutation?: UseMutationResult<any, unknown, string, unknown>;
 }
 
 const CatalogItem: React.FC<ICatalogItem> = ({
   label = "Kamera",
   stock = 11,
-  borrowed=5,
+  borrowed = 5,
   image = noItem,
   itemId,
-  description
+  description,
+  deleteItemMutation
 }) => {
   const theme = useMantineTheme();
-  const isAvailable = borrowed<stock;
+  const isAvailable = borrowed < stock;
 
   const [opened, setOpened] = useState(false);
 
   return (
     <>
       <CatalogItemDetailModal
+        itemId={itemId || ""}
         opened={opened}
         setOpened={setOpened}
         label={label}
-        image={image==""? noItem : image}
+        image={image == "" ? noItem : image}
         stock={stock}
         borrowed={borrowed}
         description={description}
+        deleteItemMutation={deleteItemMutation}
       />
       <div
         className={`p-2 rounded-[24px] mb-4 hover:shadow-2xl shadow-xl duration-200 cursor-pointer
@@ -70,7 +75,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
         >
           <div className="w-full h-[200px] overflow-hidden rounded-[16px] p-1 bg-white ">
             <img
-              src={image==""? noItem : image}
+              src={image == "" ? noItem : image}
               alt="Gambar Item"
               className="w-full h-full object-cover rounded-[16px]"
             />
@@ -89,7 +94,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
                 {isAvailable && (
                   <span className="text-sm text-secondary-text font-normal">
                     {" "}
-                    ({stock-borrowed} Item)
+                    ({stock - borrowed} Item)
                   </span>
                 )}
               </Text>
@@ -98,11 +103,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
               color={theme.colors["white"][5]}
               size={32}
               className={`p-1 rounded-full duration-100
-              ${
-                isAvailable
-                  ? `bg-green`
-                  : `bg-red`
-              }`}
+              ${isAvailable ? `bg-green` : `bg-red`}`}
             />
           </Group>
           {/* <Text className="text-primary-text text-md font-semibold">

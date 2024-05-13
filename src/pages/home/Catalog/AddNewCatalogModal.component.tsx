@@ -13,34 +13,34 @@ import {
 } from "./AddNewCatalogItemInterfaces.interface";
 import { useForm, yupResolver } from "@mantine/form";
 import instance from "../../../utils/http";
-import { useMutation } from "react-query";
-import { qfAddItem } from "../../../utils/query/item-query";
+import { UseMutationResult, useMutation } from "react-query";
+import { IAddNewItem, qfAddItem } from "../../../utils/query/item-query";
 
 export interface IAddNewCatalogModal {
   opened: boolean;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
+  postAddItemMutation: UseMutationResult<any, unknown, IAddNewItem, unknown>;
 }
 
 const AddNewCatalogModal: React.FC<IAddNewCatalogModal> = ({
   opened,
-  setOpened
+  setOpened,
+  postAddItemMutation
 }) => {
   const form = useForm<IAddNewCatalogItemInterfaces>({
     validate: yupResolver(AddNewCatalogItemSchema)
   });
 
-  const postAddItemMutation = useMutation(
-    "post-add-item",
-    qfAddItem
-  );
-
-  function handleAddCatalogItem(){
-    console.log(values, 'values')
+  function handleAddCatalogItem() {
+    console.log(values, "values");
     postAddItemMutation.mutate({
       name: values.itemName,
       description: values.description,
-      stock: values.stock
-    })
+      stock: values.stock,
+      thumbnail: values.image
+    });
+    
+    setOpened(false)
   }
 
   const {
