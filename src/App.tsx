@@ -5,15 +5,16 @@ import Home from "./pages/home/Home.page";
 import { MAINROUTES } from "./utils/const/routes";
 import { MantineProvider } from "@mantine/core";
 import Activity from "./pages/activity/Activity.page";
+import { AuthProvider } from "./context/AuthContext.context";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <MantineProvider
-    withCSSVariables
-    withGlobalStyles
-    withNormalizeCSS
+      withCSSVariables
+      withGlobalStyles
+      withNormalizeCSS
       theme={{
         colors: {
           "primary-text": [
@@ -175,15 +176,17 @@ function App() {
         }
       }}
     >
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <Routes>
-            <Route path={MAINROUTES.home} element={<Home />} />
-            <Route path={MAINROUTES.activity} element={<Activity />} />
-            {/* <Route path={"*"} element={<NotFoundPage />} /> */}
-          </Routes>
-        </BrowserRouter>
-      </QueryClientProvider>
+      <AuthProvider>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <Routes>
+              <Route path={MAINROUTES.home} element={<Home />} />
+              <Route path={MAINROUTES.activity} element={<Activity />} />
+              {/* <Route path={"*"} element={<NotFoundPage />} /> */}
+            </Routes>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </AuthProvider>
     </MantineProvider>
   );
 }

@@ -174,6 +174,29 @@ export const MyTextInput = ({ onFocus, onBlur, ...props }: TextInputProps) => {
   );
 };
 
+export const MyPasswordInput = ({ onFocus, onBlur, ...props }: PasswordInputProps) => {
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+
+  return (
+    <>
+      <PasswordInput
+        className="text-primary-text"
+        size="lg"
+        styles={{ ...getDefaultStyle(isFocus, !!props.error) }}
+        onFocus={(e) => {
+          setIsFocus(true);
+          if (!!onFocus) onFocus(e);
+        }}
+        onBlur={(e) => {
+          setIsFocus(false);
+          if (!!onBlur) onBlur(e);
+        }}
+        {...props}
+      />
+    </>
+  );
+};
+
 export const MyNumberInput = ({
   onFocus,
   onBlur,
