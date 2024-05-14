@@ -84,6 +84,20 @@ export async function qfFetchAllItems() {
   return response.json();
 }
 
+export async function qfFetchAllLentActivity() {
+  const response = await fetch(`${endpoint}/lent-items`, {
+    method: "GET",
+    headers: {
+      ...getTokenAuthorizationHeader()
+    }
+  });
+  console.log(response, "response");
+  if (!response.ok) {
+    throw new Error("Error");
+  }
+  return response.json();
+}
+
 export async function qfLentItem(values: ILentItem) {
   const response = await fetch(`${endpoint}/lent-items`, {
     method: "POST",

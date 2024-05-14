@@ -9,7 +9,7 @@ import {
   Text,
   useMantineTheme
 } from "@mantine/core";
-import ActivityItem from "./ActivityItem.component";
+import ActivityItem, { IActivityItem } from "./ActivityItem.component";
 import {
   MyDatePickerInput,
   MySearchInput,
@@ -31,22 +31,43 @@ import {
   formatDateNormal
 } from "../../utils/function/date.function";
 import { useDebouncedValue } from "@mantine/hooks";
+import { qfFetchAllLentActivity } from "../../utils/query/item-query";
+import { useQuery } from "react-query";
 
 export interface IActivity {}
 
 export interface IBorrowActivity {
-  id: number;
+  id: string;
   itemName: string;
   itemImage: string;
   borrower: string;
+  nim?: string;
   activityType: "borrow" | "return";
   borrowDate: Date;
-  borrowTime: number;
-  supposedReturnDate: Date;
-  supposedReturnTime: number;
-  actualReturnDate: Date;
-  actualReturnTime: number;
+  supposedReturnDate?: Date;
+  actualReturnDate?: Date;
   additionalInformation: string;
+}
+
+function formatLentActivity(beData: any[] = []) {
+  const formatted = beData?.map((d) => {
+    const data: IBorrowActivity = {
+      activityType: d?.status == "LENT" ? "borrow" : "return",
+      borrowDate: new Date(d?.lendStartTime),
+      additionalInformation: d?.description,
+      supposedReturnDate: new Date(d?.lendEndTime),
+      borrower: d?.student.name,
+      nim: d?.student.studentId,
+      itemImage: d?.item.itemThumbnail,
+      itemName: d?.item.name,
+      id: "",
+      actualReturnDate: new Date()
+    };
+
+    return data;
+  });
+
+  return formatted;
 }
 
 const tableHeadings: IFETableHeadingProps[] = [
@@ -98,6 +119,24 @@ const tableHeadings: IFETableHeadingProps[] = [
 ];
 
 const Activity: React.FC<IActivity> = ({}) => {
+  const {
+    data,
+    isFetching,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isSuccess,
+    isRefetching
+  } = useQuery(`fetch-all-lent`, qfFetchAllLentActivity, {
+    onSuccess(data) {
+      console.log(data, "dasdasdasd");
+      setBorrowActivities(formatLentActivity(data?.data || []));
+    }
+  });
+
+  console.log(data, "data");
+
   const amtDataPerPage = 5;
   const [activePage, setActivePage] = useState<number>(1);
   const theme = useMantineTheme();
@@ -110,7 +149,7 @@ const Activity: React.FC<IActivity> = ({}) => {
   // const borrowActivities: Array<IBorrowActivity> = dummyBorrowActivities;
   const [borrowActivities, setBorrowActivities] = useState<
     Array<IBorrowActivity>
-  >(dummyBorrowActivities);
+  >(formatLentActivity(data?.data || []));
 
   useEffect(() => {
     const lowerQuery = query?.toLowerCase();
@@ -213,7 +252,7 @@ const Activity: React.FC<IActivity> = ({}) => {
           )
         },
         timeDetail: {
-          label: data.borrowTime,
+          label: data.itemName,
           element: (
             <Stack className="">
               <Group className="gap-2">
@@ -221,14 +260,23 @@ const Activity: React.FC<IActivity> = ({}) => {
                   Waktu Peminjaman
                 </Text>
                 <Text className="text-primary-text">
-                  {formatDateNormal(data.borrowDate)}, {data.borrowTime}:00
+                  {formatDateNormal(data.borrowDate)}
+                </Text>
+              </Group>
+              <Divider />
+              <Group className="gap-2">
+                <Text className="font-semibold text-primary-text">
+                  Waktu Dikembalikan Barang
+                </Text>
+                <Text className="text-primary-text">
+                  {formatDateNormal(data.supposedReturnDate || new Date())},{" "}
                 </Text>
               </Group>
               {data.activityType == "return" && (
                 <>
                   <Divider />
                   <Stack className="gap-0">
-                    <Group className="gap-2">
+                    {/* <Group className="gap-2">
                       <Text className="font-semibold text-primary-text">
                         Waktu Pengembalian Seharusnya
                       </Text>
@@ -236,14 +284,16 @@ const Activity: React.FC<IActivity> = ({}) => {
                         {formatDateNormal(data.supposedReturnDate)},{" "}
                         {data.supposedReturnTime}:00
                       </Text>
-                    </Group>
+                    </Group> */}
                     <Group className="gap-2">
                       <Text className="font-semibold text-primary-text">
                         Waktu Dikembalikan Barang
                       </Text>
                       <Text className="text-primary-text">
-                        {formatDateNormal(data.actualReturnDate)},{" "}
-                        {data.actualReturnTime}:00
+                        {formatDateNormal(
+                          data.supposedReturnDate || new Date()
+                        )}
+                        ,{" "}
                       </Text>
                     </Group>
                   </Stack>
