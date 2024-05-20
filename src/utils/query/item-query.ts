@@ -62,6 +62,26 @@ export async function qfEditItem({ itemId, values }: IEditItem) {
   return data;
 }
 
+export async function qfReturnItem(itemId:string) {
+  const response = await fetch(`${BASE_URL}/lent-items/${itemId}`, {
+    method: "PUT",
+    headers: {
+      ...getTokenAuthorizationHeader()
+    },
+    mode: "cors",
+    credentials: "same-origin",
+    body: JSON.stringify({
+      isReturned:true
+    })
+  });
+
+  const data = await response.json();
+
+  console.log("INI RESPONSE", data);
+
+  return data;
+}
+
 export async function qfDeleteItem(itemId: string) {
   const response = await fetch(`${endpoint}/${itemId}`, {
     method: "DELETE",

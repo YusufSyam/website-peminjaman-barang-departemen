@@ -1,4 +1,5 @@
 import {
+  Checkbox,
   Divider,
   Group,
   Stack,
@@ -9,7 +10,7 @@ import React, { useContext, useEffect, useState } from "react";
 import MainLayout from "../../layouts/MainLayout.layout";
 
 import { useDebouncedValue } from "@mantine/hooks";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import noItem from "../../assets/images/no-item.png";
 import {
   IconReplyOutline,
@@ -24,13 +25,20 @@ import {
   formatDateDetection,
   formatDateNormal
 } from "../../utils/function/date.function";
-import { qfFetchAllLentActivity } from "../../utils/query/item-query";
+import {
+  qfFetchAllLentActivity,
+  qfReturnItem
+} from "../../utils/query/item-query";
 import ActivityTableComponent, {
+  IActivityTableAction,
   IFETableHeadingProps,
   IFETableRowColumnProps
 } from "./ActivityTable.component";
 import { AuthContext } from "../../context/AuthContext.context";
 import NotFound from "../not-found/NotFound.page";
+import MyModal from "../../components/MyModal.component";
+import WarningModal from "../../components/WarningModal.component";
+import LoadingModal from "../../components/LoadingModal.component";
 
 export interface IActivity {}
 
@@ -58,7 +66,7 @@ function formatLentActivity(beData: any[] = []) {
       nim: d?.student.studentId,
       itemImage: d?.item.itemThumbnail,
       itemName: d?.item.name,
-      id: "",
+      id: d?.id,
       actualReturnDate: new Date()
     };
 
@@ -129,7 +137,13 @@ const Activity: React.FC<IActivity> = ({}) => {
   } = useQuery(`fetch-all-lent`, qfFetchAllLentActivity, {
     onSuccess(data) {
       console.log(data, "dasdasdasd");
-      setBorrowActivities(formatLentActivity(data?.data || []));
+      setFormattedData(formatLentActivity(data?.data || []));
+    }
+  });
+
+  const putReturnItemMutation = useMutation("put-return-item", qfReturnItem, {
+    onSuccess() {
+      refetch();
     }
   });
 
@@ -143,19 +157,30 @@ const Activity: React.FC<IActivity> = ({}) => {
   const [query] = useDebouncedValue(searchTerm, 500);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedRow, setSelectedRow] = useState(0);
+  const [isReturnItemModalOpened, setIsReturnItemModalOpened] = useState(false);
+  const [isJustLentChecked, setIsJustLentChecked] = useState(false);
 
   // const borrowActivities: Array<IBorrowActivity> = dummyBorrowActivities;
-  const [borrowActivities, setBorrowActivities] = useState<
-    Array<IBorrowActivity>
-  >(formatLentActivity(data?.data || []));
+  const [formattedData, setFormattedData] = useState(
+    formatLentActivity(data?.data || [])
+  );
+  const [borrowActivities, setBorrowActivities] =
+    useState<Array<IBorrowActivity>>(formattedData);
+
+  useEffect(() => {
+    setBorrowActivities(formattedData);
+  }, [formattedData]);
+
+  console.log("borrowActivities", borrowActivities);
 
   useEffect(() => {
     const lowerQuery = query?.toLowerCase();
 
-    let tempActivity = borrowActivities?.filter(
+    let tempActivity = formattedData?.filter(
       (d: IBorrowActivity) =>
         d?.itemName?.toLowerCase()?.includes(lowerQuery) ||
-        d?.borrower?.toLowerCase()?.includes(lowerQuery)
+        d?.nim?.toLowerCase()?.includes(lowerQuery)
     );
 
     if (selectedDate != null) {
@@ -168,8 +193,15 @@ const Activity: React.FC<IActivity> = ({}) => {
       console.log(tempActivity, "tempActivity");
     }
 
+    if (isJustLentChecked){
+      tempActivity = tempActivity?.filter(
+        (d: IBorrowActivity) =>
+          d.activityType==="borrow"
+      );
+    }
+
     setBorrowActivities(tempActivity);
-  }, [query, selectedDate]);
+  }, [query, selectedDate, isJustLentChecked, formattedData]);
 
   console.log(selectedDate, "selectedDate");
   console.log(
@@ -187,11 +219,27 @@ const Activity: React.FC<IActivity> = ({}) => {
     "borrowActivities"
   );
 
+  const actions: IActivityTableAction[] = [
+    {
+      label: "Pengembalian",
+      eachButtonRounded: true,
+      backgroundColor: "green",
+      isDisabled: (row: any) => {
+        return row.activity.label == "return";
+      },
+      // Row disini itu row yang ada di table rows
+      onClick: (row: any) => {
+        setSelectedRow(row.id.label);
+        setIsReturnItemModalOpened(true);
+      }
+    }
+  ];
+
   const tableRows = borrowActivities?.map(
     (data, idx) =>
       ({
         id: {
-          label: data.id
+          label: idx
         },
         index: {
           label: idx + 1
@@ -236,16 +284,16 @@ const Activity: React.FC<IActivity> = ({}) => {
               >
                 {data.activityType == "borrow" ? (
                   <IconShareWindowsOutline
-                    size={22}
+                    size={18}
                     color={theme.colors["white"][5]}
                   />
                 ) : (
                   <IconReplyOutline
-                    size={20}
+                    size={18}
                     color={theme.colors["white"][5]}
                   />
                 )}
-                <Text className="text-lg text-white">
+                <Text className="text-md text-white font-semibold">
                   {data.activityType == "borrow" ? "Meminjam" : "Mengembalikan"}
                 </Text>
               </Group>
@@ -255,10 +303,10 @@ const Activity: React.FC<IActivity> = ({}) => {
         timeDetail: {
           label: data.itemName,
           element: (
-            <Stack className="">
+            <Stack className="w-fit mx-auto">
               <Group className="gap-2">
                 <Text className="font-semibold text-primary-text">
-                  Waktu Peminjaman
+                  Peminjaman
                 </Text>
                 <Text className="text-primary-text">
                   {formatDateNormal(data.borrowDate)}
@@ -267,17 +315,17 @@ const Activity: React.FC<IActivity> = ({}) => {
               <Divider />
               <Group className="gap-2">
                 <Text className="font-semibold text-primary-text">
-                  Waktu Dikembalikan Barang
+                  Pengembalian Barang
                 </Text>
                 <Text className="text-primary-text">
                   {formatDateNormal(data.supposedReturnDate || new Date())},{" "}
                 </Text>
               </Group>
-              {data.activityType == "return" && (
+              {/* {data.activityType == "return" && (
                 <>
                   <Divider />
                   <Stack className="gap-0">
-                    {/* <Group className="gap-2">
+                    <Group className="gap-2">
                       <Text className="font-semibold text-primary-text">
                         Waktu Pengembalian Seharusnya
                       </Text>
@@ -285,7 +333,7 @@ const Activity: React.FC<IActivity> = ({}) => {
                         {formatDateNormal(data.supposedReturnDate)},{" "}
                         {data.supposedReturnTime}:00
                       </Text>
-                    </Group> */}
+                    </Group>
                     <Group className="gap-2">
                       <Text className="font-semibold text-primary-text">
                         Waktu Dikembalikan Barang
@@ -299,7 +347,7 @@ const Activity: React.FC<IActivity> = ({}) => {
                     </Group>
                   </Stack>
                 </>
-              )}
+              )} */}
             </Stack>
           )
         },
@@ -307,11 +355,17 @@ const Activity: React.FC<IActivity> = ({}) => {
           label: data.additionalInformation,
           element: (
             <Stack className="">
-              <Text className="text-primary-text text-justify ">
+              <Text className="text-primary-text text-justify">
                 {/* <span className="font-semibold">Keterangan Tambahan</span>{" "} */}
-                {data.additionalInformation}
+                {data.additionalInformation==""? "Tidak ada keterangan" : data.additionalInformation}
               </Text>
             </Stack>
+            // <div className="w-[200px] bg-green">
+            //   <p className="h-[100px] w-[200px] text-primary-text text-justify bg-red break-all">
+            //    a Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+            //     Quae, voluptatibus!
+            //   </p>
+            // </div>
           )
         }
       } as IFETableRowColumnProps)
@@ -324,26 +378,71 @@ const Activity: React.FC<IActivity> = ({}) => {
 
   console.log(selectedDate, "selectedDate");
 
-  
   const authContext = useContext(AuthContext);
   if (!authContext) {
     throw new Error("AuthContext must be used within an AuthProvider");
   }
 
   const { isLoggedIn } = authContext;
-  
-  if(!isLoggedIn){
-    return <NotFound />
+
+  if (!isLoggedIn) {
+    return <NotFound />;
   }
 
   return (
     <MainLayout activePage="Aktivitas">
       <Stack className="px-12 mt-6 gap-4">
+        <WarningModal
+          opened={isReturnItemModalOpened}
+          setOpened={setIsReturnItemModalOpened}
+          title={"Pengembalian Barang"}
+          onClose={() => {}}
+          minWidth={700}
+          yesButtonLabel="Kembalikan"
+          onSubmit={() => {
+            putReturnItemMutation.mutate(borrowActivities?.[selectedRow]?.id);
+            setIsReturnItemModalOpened(false);
+          }}
+        >
+          <Stack className="text-primary-text">
+            <Text>
+              Lakukan aksi ini jika mahasiswa yang bersangkutan:
+              <span className="font-poppins">
+                {" "}
+                <span>{borrowActivities?.[selectedRow]?.borrower}</span>{" "}
+                <span className="text-secondary-text-500">
+                  ({borrowActivities?.[selectedRow]?.nim})
+                </span>
+              </span>
+            </Text>{" "}
+            <Text>
+              Telah mengembalikan{" "}
+              <span className="text-red font-semibold">
+                {borrowActivities?.[selectedRow]?.itemName}
+              </span>{" "}
+              yang dipinjam sebelumnya pada{" "}
+              {formatDateNormal(borrowActivities?.[selectedRow]?.borrowDate)}{" "}
+              dalam keadaan baik. Klik "Kembalikan" untuk melakukan pengembalian
+            </Text>
+          </Stack>
+        </WarningModal>
+        <LoadingModal opened={putReturnItemMutation.isLoading} />
         <Group className="my-4 justify-between">
           <Text className="font-poppins-semibold text-primary-text text-[30px] ml-1">
             Riwayat Peminjaman
           </Text>
-          <Group className="gap-6">
+          <Group
+            className="gap-6"
+          >
+            <Group className="bg-white px-4 py-[6px] rounded-full border-2 border-red cursor-pointer" 
+            onClick={() => {
+              setIsJustLentChecked(!isJustLentChecked);
+            }}>
+              <Checkbox checked={isJustLentChecked} color="red" />
+              <Text className="text-primary-text-500/80 font-semibold pb-1">
+                Hanya Meminjam
+              </Text>
+            </Group>
             <MyDatePickerInput
               size="md"
               locale="id"
@@ -353,12 +452,6 @@ const Activity: React.FC<IActivity> = ({}) => {
               onChange={setSelectedDate}
               clearable
             />
-
-            <MySearchInput
-              onChange={handleSearchChange}
-              w={240}
-              placeholder="Cari barang / nim . . ."
-            />
           </Group>
         </Group>
         <Stack className="gap-0 rounded-t-3xl overflow-hidden">
@@ -367,7 +460,15 @@ const Activity: React.FC<IActivity> = ({}) => {
               <Text className="font-poppins-semibold text-2xl text-white">
                 Daftar Aktivitas
               </Text>
+              <Text className="text-white">
+                ({borrowActivities.length} Item)
+              </Text>
             </Group>
+            <MySearchInput
+              onChange={handleSearchChange}
+              w={240}
+              placeholder="Cari barang / nim . . ."
+            />
           </Group>
           <ActivityTableComponent
             noDataMsg=""
@@ -378,7 +479,7 @@ const Activity: React.FC<IActivity> = ({}) => {
             }}
             onPageChange={setActivePage}
             activePage={activePage}
-            actions={[]}
+            actions={actions}
             tableTitle="Deteksi Terbaru"
             tableRows={tableRows}
             tableHeadings={tableHeadings}
@@ -386,6 +487,7 @@ const Activity: React.FC<IActivity> = ({}) => {
             actionOrientation="vertical"
             onProgressData={0}
             showTableHeader
+            actionColumnWidth="200px"
           />
         </Stack>
       </Stack>

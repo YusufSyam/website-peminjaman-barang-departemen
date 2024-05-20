@@ -95,10 +95,8 @@ export interface IActiveSort {
 }
 
 export type IActionButtonBgColor =
-  | "primary"
-  | "primaryGradient"
-  | "errorGradient"
-  | "primaryNoBG"
+  | "red"
+  | "green"
   | "white";
 
 export interface IActivityTableAction {
@@ -118,11 +116,8 @@ export interface IActivityTableAction {
 
 // Add action color here
 const aciontBtnClsNames: { [x in IActionButtonBgColor]: string } = {
-  primary: "!bg-red !bg-opacity-20 !text-red",
-  primaryNoBG: "!text-red !bg-transparent",
-  primaryGradient: "!bg-red !bg-opacity-20 !text-red",
-  errorGradient: "!bg-red !bg-opacity-100 text-white",
-
+  red: "!bg-red !bg-opacity-20 !text-red",
+  green: "!bg-green !bg-opacity-20 text-green !disabled:bg-secondary !disabled:text-secondary-text",
   white: "!bg-white"
 };
 
@@ -398,7 +393,7 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
                                           ${
                                             action.isDisabled &&
                                             action.isDisabled(row) &&
-                                            "!bg-secondary-500 !cursor-not-allowed !bg-opacity-100 !text-secondary-text-500"
+                                            "!bg-secondary-text !cursor-not-allowed !bg-opacity-100 !text-secondary-text-500"
                                           }
                                           `}
                                       styles={{
