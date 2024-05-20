@@ -32,7 +32,7 @@ function formatCatalogItem(beData: any[] = []) {
     const data: ICatalogItem = {
       itemId: d?.itemId,
       label: d?.name,
-      stock: d?.stock,
+      stock: d?.totalItem,
       borrowed: d?.totalItem - d?.stock,
       image: d?.thumbnail,
       description: d?.description
@@ -153,7 +153,10 @@ const Catalog: React.FC<ICatalog> = ({}) => {
     );
 
     setCatalogList(tempCatalogList);
-  }, [query]);
+  }, [query, formattedData]);
+
+  console.log("formatCatalogItemlll", formattedData)
+  console.log("formatCatalogItemlll", catalogList)
   return (
     <Stack>
       <AddNewCatalogModal

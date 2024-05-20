@@ -40,7 +40,7 @@ export const getDefaultStyle = (
     ? theme.colors.error[5]
     : isFocus
     ? theme.colors["primary-text"][5]
-    : theme.colors["secondary-text"][5];
+    : theme.colors["secondary-text"][7];
   return {
     input: {
       ":focus": {
@@ -53,7 +53,7 @@ export const getDefaultStyle = (
       marginTop: "8px"
     },
     label: {
-      fontWeight: 600,
+      fontFamily: "poppins",
       color
     },
     error: {
@@ -73,13 +73,13 @@ export const getDefaultStyleSearch = (
     ? theme.colors.error[5]
     : isFocus
     ? theme.colors["primary-text"][5]
-    : theme.colors["secondary-text"][5];
+    : theme.colors["secondary-text"][7];
   return {
     input: {
       borderWidth: "2px",
       borderRadius: "9999px",
       padding: "20px",
-      borderColor: theme.colors["secondary-text"][5],
+      borderColor: theme.colors["secondary-text"][7],
       color,
       // fontWeight: 400,
       fontFamily: "poppins",
@@ -94,7 +94,7 @@ export const getDefaultStyleSearch = (
       }
     },
     label: {
-      fontWeight: 800,
+      fontFamily: "poppins",
       color
     },
     icon: {
@@ -141,7 +141,7 @@ export const getDefaultStyleDatePickerInput = (
       }
     },
     label: {
-      fontWeight: 600,
+      fontFamily: "poppins",
       color
     },
     icon: {
@@ -326,7 +326,7 @@ export const MySearchInput = ({
       <MantineTextInput
         styles={{ ...getDefaultStyleSearch(isFocus, !!props.error) }}
         icon={
-          <SearchFilled size={22} color={theme.colors["secondary-text"][5]} />
+          <SearchFilled size={22} color={theme.colors["secondary-text"][7]} />
         }
         onFocus={(e) => {
           setIsFocus(true);

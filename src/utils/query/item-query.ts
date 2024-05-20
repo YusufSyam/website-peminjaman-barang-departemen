@@ -17,19 +17,24 @@ export async function qfAddItem({
   stock,
   thumbnail
 }: IAddNewItem) {
+  const accessToken = localStorage?.getItem("accessToken");
+
+  const formData = new FormData();
+
+  formData.append("name", name);
+  formData.append("description", description);
+  formData.append("stock", (stock+""));
+  formData.append("thumbnail", thumbnail);
+
   const response = await fetch(`${endpoint}`, {
     method: "POST",
     headers: {
-      ...getTokenAuthorizationHeader()
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'multipart/form-data',
     },
     mode: "cors",
     credentials: "same-origin",
-    body: JSON.stringify({
-      name: name,
-      description: description,
-      stock: stock
-      // thumbnail: await ParseFileBase64(thumbnail),
-    })
+    body: formData
   });
 
   const data = await response.json();

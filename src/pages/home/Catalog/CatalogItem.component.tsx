@@ -38,7 +38,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
   postLentItemMutation
 }) => {
   const theme = useMantineTheme();
-  const isAvailable = borrowed < stock;
+  const isAvailable = (stock-borrowed>0);
 
   const [opened, setOpened] = useState(false);
 

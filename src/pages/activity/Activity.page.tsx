@@ -200,6 +200,7 @@ const Activity: React.FC<IActivity> = ({}) => {
       );
     }
 
+    tempActivity.sort((a, b) => b.borrowDate.getTime() - a.borrowDate.getTime());
     setBorrowActivities(tempActivity);
   }, [query, selectedDate, isJustLentChecked, formattedData]);
 

@@ -1,4 +1,4 @@
-import { Stack, Button, Group } from "@mantine/core";
+import { Stack, Button, Group, Text } from "@mantine/core";
 import { MIME_TYPES } from "@mantine/dropzone";
 import React, { useEffect } from "react";
 import DocumentInput from "../../../components/DocumentInput.component";
@@ -17,6 +17,8 @@ import {
 import { useForm, yupResolver } from "@mantine/form";
 import { UseMutationResult } from "react-query";
 import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
+import FotoKTM from "../../../assets/images/ktm.jpeg";
+import QR from "../../../assets/images/qr.png";
 
 export interface ILentItemModal {
   opened: boolean;
@@ -50,14 +52,14 @@ const LentItemModal: React.FC<ILentItemModal> = ({
     postLentItemMutation?.mutate(values);
   }
 
-  useEffect(()=>{
-    if(opened){
+  useEffect(() => {
+    if (opened) {
       setValues({
         lendStartTime: new Date(),
         itemId: itemId
-      })
+      });
     }
-  }, [opened])
+  }, [opened]);
 
   useEffect(() => {
     if (postLentItemMutation?.isSuccess) {
@@ -81,7 +83,12 @@ const LentItemModal: React.FC<ILentItemModal> = ({
       minWidth={800}
     >
       <Stack>
-        <Group>
+          <div className="border-2 border-primary-text rounded-md overflow-hidden w-fit self-center">
+            <img src={FotoKTM || ""} alt="" className="w-96 object-cover" />
+          </div>
+          <Text className="text-primary-text-500 w-[80%] self-center mb-4 text-center">
+            Silahkan scan qr-code dari KTM (kartu mahasiswa) atau menginput nim secara manual pada form input di bawah
+          </Text>
           <MyTextInput
             label="NIM Mahasiswa"
             size="md"
@@ -99,7 +106,6 @@ const LentItemModal: React.FC<ILentItemModal> = ({
             error={errors["roomName" as keyof IEditCatalogItemInterfaces]}
             className="grow"
           />
-        </Group>
         <Group>
           <MyDateTimePickerInput
             label="Waktu Peminjaman"

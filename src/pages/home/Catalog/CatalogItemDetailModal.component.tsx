@@ -45,7 +45,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
   itemId,
   postLentItemMutation
 }) => {
-  const isAvailable = borrowed < stock;
+  const isAvailable = (stock-borrowed>0);
   const theme = useMantineTheme();
 
   function handleDeleteItem() {
@@ -180,6 +180,7 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                     onClick={() => {
                       setOpenedLentItem(true);
                     }}
+                    disabled={!isAvailable}
                   >
                     Pinjam
                   </Button>
