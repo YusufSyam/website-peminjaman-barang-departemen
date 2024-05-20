@@ -17,7 +17,7 @@ import {
 import { useForm, yupResolver } from "@mantine/form";
 import { UseMutationResult } from "react-query";
 import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
-import FotoKTM from "../../../assets/images/ktm.jpeg";
+import FotoKTM from "../../../assets/images/ktm.png";
 import QR from "../../../assets/images/qr.png";
 
 export interface ILentItemModal {

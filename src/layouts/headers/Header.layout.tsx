@@ -67,22 +67,22 @@ const Header: React.FC<IHeader> = ({ activePage }) => {
       {/* <ConfirmationModal opened={true} /> */}
       <Grid className="pb-2 pt-4 px-12 z-10 border-b border-secondary shadow-md">
         <Grid.Col span={4} className="">
-          <Group className="gap-3">
-            <div className="w-10">
+          <Group className="lg:gap-3 gap-2 flex-nowrap">
+            <div className="lg:w-10 w-8">
               <img src={unhasLogo} alt="Logo Unhas" />
             </div>
             <Stack className="gap-0">
-              <Text className="font-poppins-semibold text-lg text-start text-primary-text">
+              <Text className="font-poppins lg:font-poppins-semibold text-sm md:text-md lg:text-lg text-start text-primary-text">
                 Peminjaman Inventaris Departemen
               </Text>
-              <Text className="text-start text-sm text-secondary-text -mt-1">
-                Dep. Matematika, Fak. MIPA | Universitas Hasanuddin
+              <Text className="text-start hidden lg:block lg:text-sm text-secondary-text -mt-1">
+                Dept. Matematika, Fak. MIPA | Universitas Hasanuddin
               </Text>
             </Stack>
           </Group>
         </Grid.Col>
         <Grid.Col span={4} className="self-center">
-          <Group className="justify-center align-middle gap-4 -mb-2">
+          <Group className="justify-center align-middle gap-2 lg:gap-4 lg:-mb-2">
             <HeaderMenu
               href={MAINROUTES.home}
               label="Beranda"
@@ -100,17 +100,17 @@ const Header: React.FC<IHeader> = ({ activePage }) => {
         </Grid.Col>
 
         <Grid.Col span={4} className="flex">
-          <Group className="justify-end w-full relative mb-1">
-            <Stack className="gap-0 absolute top-[6px] ">
+          <Group className="justify-end w-full relative self-center">
+            <Stack className="gap-0 ">
               {isLoggedIn ? (
                 <>
                   <Group
-                    className="gap-2 cursor-pointer"
+                    className="gap-2 cursor-pointer flex-nowrap"
                     onClick={() => {
                       setLogoutModalOpened(true);
                     }}
                   >
-                    <Text className="text-primary-text font-semibold">
+                    <Text className="text-primary-text font-semibold lg:text-lg text-md">
                       Log Out
                     </Text>
                     <IconLogoutOutline

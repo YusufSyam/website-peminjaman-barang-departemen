@@ -80,8 +80,8 @@ const CatalogItem: React.FC<ICatalogItem> = ({
               className="w-full h-full object-cover rounded-[16px]"
             />
           </div>
-          <Group className="mt-4 mb-2 mx-1 py-2 px-4 bg-white rounded-3xl justify-between border border-secondary-text hover:bg-secondary/70 duration-200">
-            <Stack className="gap-0  ">
+          <Group className="mt-4 mb-2 mx-1 py-2 px-4 bg-white relative rounded-3xl justify-between border border-secondary-text hover:bg-secondary/70 duration-200">
+            <Stack className="gap-0 z-50 ">
               <Text className="text-start font-poppins text-primary-text">
                 {label}
               </Text>
@@ -102,7 +102,7 @@ const CatalogItem: React.FC<ICatalogItem> = ({
             <IconRightArrowNoTail
               color={theme.colors["white"][5]}
               size={32}
-              className={`p-1 rounded-full duration-100
+              className={`p-1 rounded-full duration-100 absolute right-4
               ${isAvailable ? `bg-green` : `bg-red`}`}
             />
           </Group>

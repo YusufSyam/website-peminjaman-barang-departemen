@@ -193,14 +193,15 @@ const Activity: React.FC<IActivity> = ({}) => {
       console.log(tempActivity, "tempActivity");
     }
 
-    if (isJustLentChecked){
+    if (isJustLentChecked) {
       tempActivity = tempActivity?.filter(
-        (d: IBorrowActivity) =>
-          d.activityType==="borrow"
+        (d: IBorrowActivity) => d.activityType === "borrow"
       );
     }
 
-    tempActivity.sort((a, b) => b.borrowDate.getTime() - a.borrowDate.getTime());
+    tempActivity.sort(
+      (a, b) => b.borrowDate.getTime() - a.borrowDate.getTime()
+    );
     setBorrowActivities(tempActivity);
   }, [query, selectedDate, isJustLentChecked, formattedData]);
 
@@ -281,7 +282,7 @@ const Activity: React.FC<IActivity> = ({}) => {
               <Group
                 className={`${
                   data.activityType == "borrow" ? "bg-red" : "bg-green"
-                } self-center w-fit mx-auto py-[6px] px-4 rounded-full gap-2`}
+                } self-center w-fit mx-auto py-[6px] px-4 rounded-full gap-2 flex-nowrap`}
               >
                 {data.activityType == "borrow" ? (
                   <IconShareWindowsOutline
@@ -358,7 +359,9 @@ const Activity: React.FC<IActivity> = ({}) => {
             <Stack className="">
               <Text className="text-primary-text text-justify">
                 {/* <span className="font-semibold">Keterangan Tambahan</span>{" "} */}
-                {data.additionalInformation==""? "Tidak ada keterangan" : data.additionalInformation}
+                {data.additionalInformation == ""
+                  ? "Tidak ada keterangan"
+                  : data.additionalInformation}
               </Text>
             </Stack>
             // <div className="w-[200px] bg-green">
@@ -429,22 +432,11 @@ const Activity: React.FC<IActivity> = ({}) => {
         </WarningModal>
         <LoadingModal opened={putReturnItemMutation.isLoading} />
         <Group className="my-4 justify-between">
-          <Text className="font-poppins-semibold text-primary-text text-[30px] ml-1">
+          <Text className="font-poppins-semibold text-primary-text text-[28px] lg:text-[30px] ml-1">
             Riwayat Peminjaman
           </Text>
-          <Group
-            className="gap-6"
-          >
-            <Group className="bg-white px-4 py-[6px] rounded-full border-2 border-red cursor-pointer" 
-            onClick={() => {
-              setIsJustLentChecked(!isJustLentChecked);
-            }}>
-              <Checkbox checked={isJustLentChecked} color="red" />
-              <Text className="text-primary-text-500/80 font-semibold pb-1">
-                Hanya Meminjam
-              </Text>
-            </Group>
-            <MyDatePickerInput
+          <Group className="gap-6">
+            {/* <MyDatePickerInput
               size="md"
               locale="id"
               defaultValue={selectedDate}
@@ -452,7 +444,7 @@ const Activity: React.FC<IActivity> = ({}) => {
               value={selectedDate}
               onChange={setSelectedDate}
               clearable
-            />
+            /> */}
           </Group>
         </Group>
         <Stack className="gap-0 rounded-t-3xl overflow-hidden">
@@ -465,11 +457,24 @@ const Activity: React.FC<IActivity> = ({}) => {
                 ({borrowActivities.length} Item)
               </Text>
             </Group>
-            <MySearchInput
-              onChange={handleSearchChange}
-              w={240}
-              placeholder="Cari barang / nim . . ."
-            />
+            <Group>
+              <Group
+                className="bg-white px-4 py-[6px] rounded-full border-2 border-red cursor-pointer"
+                onClick={() => {
+                  setIsJustLentChecked(!isJustLentChecked);
+                }}
+              >
+                <Checkbox checked={isJustLentChecked} color="red" />
+                <Text className="text-primary-text-500/80 font-semibold pb-1">
+                  Hanya Meminjam
+                </Text>
+              </Group>
+              <MySearchInput
+                onChange={handleSearchChange}
+                w={240}
+                placeholder="Cari barang / nim . . ."
+              />
+            </Group>
           </Group>
           <ActivityTableComponent
             noDataMsg=""

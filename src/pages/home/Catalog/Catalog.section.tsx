@@ -166,7 +166,7 @@ const Catalog: React.FC<ICatalog> = ({}) => {
       />
       {/* <Group className=" mb-4 self-center"> */}
       <Group className="my-4 justify-between">
-        <Text className="font-poppins-semibold text-primary-text text-[30px] ml-1">
+        <Text className="font-poppins-semibold text-primary-text text-[28px] lg:text-[30px] ml-1">
           Katalog Inventaris
         </Text>
         <Group className="gap-6">
@@ -206,7 +206,7 @@ const Catalog: React.FC<ICatalog> = ({}) => {
               )
               ?.map((item: ICatalogItem, idx: number) => {
                 return (
-                  <Grid.Col key={idx} span={3}>
+                  <Grid.Col key={idx} sm={6} md={4} lg={3}>
                     <CatalogItem
                       {...item}
                       deleteItemMutation={deleteItemMutation}

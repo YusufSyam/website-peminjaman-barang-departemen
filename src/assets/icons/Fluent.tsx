@@ -55,6 +55,7 @@ export function StickerInventory({
       y={0}
       viewBox="0 0 512 512"
       xmlSpace="preserve"
+      className="hidden lg:block"
     >
       <g>
         <rect
