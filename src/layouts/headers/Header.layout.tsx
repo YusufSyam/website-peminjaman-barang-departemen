@@ -13,6 +13,7 @@ import WarningModal from "../../components/WarningModal.component";
 import LoadingModal from "../../components/LoadingModal.component";
 import ConfirmationModal from "../../components/ConfirmationModal.component";
 import { AuthContext } from "../../context/AuthContext.context";
+import { useNavigate } from "react-router-dom";
 
 export interface IHeader {
   activePage: TPageName;
@@ -21,15 +22,14 @@ export interface IHeader {
 const Header: React.FC<IHeader> = ({ activePage }) => {
   const [loginModalOpened, setloginModalOpened] = useState(false);
   const [logoutModalOpened, setLogoutModalOpened] = useState(false);
-  
-  
+
   const authContext = useContext(AuthContext);
   if (!authContext) {
-      throw new Error('AuthContext must be used within an AuthProvider');
+    throw new Error("AuthContext must be used within an AuthProvider");
   }
 
-  const { login : loginFunc, logout : logoutFunc, isLoggedIn } = authContext;
-  
+  const { login: loginFunc, logout: logoutFunc, isLoggedIn } = authContext;
+
   const loginMutation = useMutation("post-login", loginFunc, {
     onSuccess() {
       setloginModalOpened(false);
@@ -37,11 +37,14 @@ const Header: React.FC<IHeader> = ({ activePage }) => {
   });
   console.log(localStorage, "localStorage isLogin");
 
-  console.log(isLoggedIn, 'isLoggedIn')
+  console.log(isLoggedIn, "isLoggedIn");
+
+  const navigate= useNavigate();
 
   function handleLogOut() {
-    logoutFunc()
-    setLogoutModalOpened(false)
+    logoutFunc();
+    navigate(MAINROUTES.home)
+    setLogoutModalOpened(false);
   }
   return (
     <>
@@ -85,45 +88,65 @@ const Header: React.FC<IHeader> = ({ activePage }) => {
               label="Beranda"
               activePage={activePage}
             />
-            <HeaderMenu
-              href={MAINROUTES.activity}
-              label="Aktivitas"
-              activePage={activePage}
-            />
+            {isLoggedIn && (
+              <HeaderMenu
+                href={MAINROUTES.activity}
+                label="Aktivitas"
+                activePage={activePage}
+              />
+            )}
             {/* <HeaderMenu href={MAINROUTES.activity} label="Aktivitas2" activePage={activePage} /> */}
           </Group>
         </Grid.Col>
 
-        <Grid.Col span={4} className="self-center">
-          {isLoggedIn ? (
-            <Group
-              className="justify-end gap-2 cursor-pointer"
-              onClick={() => {
-                setLogoutModalOpened(true);
-              }}
-            >
-              <Text className="text-primary-text font-semibold">Log Out</Text>
-              <IconLogoutOutline
-                className="rounded-full p-[5px] bg-red"
-                color="#FFFFFF"
-                size={28}
-              />
-            </Group>
-          ) : (
-            <Group
-              className="justify-end gap-2 cursor-pointer"
-              onClick={() => {
-                setloginModalOpened(true);
-              }}
-            >
-              <Text className="text-primary-text font-semibold">Log In</Text>
-              <IconLoginOutline
-                className="rounded-full p-[5px] pr-2 bg-green"
-                color="#FFFFFF"
-                size={28}
-              />
-            </Group>
-          )}
+        <Grid.Col span={4} className="flex">
+          <Group className="justify-end w-full relative mb-1">
+            <Stack className="gap-0 absolute top-[6px] ">
+              {isLoggedIn ? (
+                <>
+                  <Group
+                    className="gap-2 cursor-pointer"
+                    onClick={() => {
+                      setLogoutModalOpened(true);
+                    }}
+                  >
+                    <Text className="text-primary-text font-semibold">
+                      Log Out
+                    </Text>
+                    <IconLogoutOutline
+                      className="rounded-full p-[5px] bg-red"
+                      color="#FFFFFF"
+                      size={28}
+                    />
+                  </Group>
+                  <Text className="text-secondary-text-500 text-sm font-semibold -mt-[2px]">
+                    ( Admin )
+                  </Text>
+                </>
+              ) : (
+                <>
+                  <Group
+                    className="gap-2 cursor-pointer"
+                    onClick={() => {
+                      setloginModalOpened(true);
+                    }}
+                  >
+                    <Text className="text-primary-text font-semibold">
+                      Log In
+                    </Text>
+                    <IconLoginOutline
+                      className="rounded-full p-[5px] pr-2 bg-green"
+                      color="#FFFFFF"
+                      size={28}
+                    />
+                  </Group>
+                  <Text className="text-secondary-text-500 text-sm font-semibold -mt-[2px]">
+                    ( Tamu )
+                  </Text>
+                </>
+              )}
+            </Stack>
+          </Group>
         </Grid.Col>
       </Grid>
     </>

@@ -6,6 +6,7 @@ import { MAINROUTES } from "./utils/const/routes";
 import { MantineProvider } from "@mantine/core";
 import Activity from "./pages/activity/Activity.page";
 import { AuthProvider } from "./context/AuthContext.context";
+import NotFound from "./pages/not-found/NotFound.page";
 
 const queryClient = new QueryClient();
 
@@ -182,7 +183,7 @@ function App() {
             <Routes>
               <Route path={MAINROUTES.home} element={<Home />} />
               <Route path={MAINROUTES.activity} element={<Activity />} />
-              {/* <Route path={"*"} element={<NotFoundPage />} /> */}
+                    <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
         </QueryClientProvider>

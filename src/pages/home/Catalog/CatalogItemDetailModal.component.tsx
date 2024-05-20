@@ -6,7 +6,7 @@ import {
   Text,
   useMantineTheme
 } from "@mantine/core";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IconTrashFilled, IconEditFilled } from "../../../assets/icons/Fluent";
 import MyModal from "../../../components/MyModal.component";
 import WarningModal from "../../../components/WarningModal.component";
@@ -15,6 +15,8 @@ import { UseMutationResult } from "react-query";
 import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
 import LentItemModal from "./LentItemModal.component";
 import { ILentItem } from "./CatalogItemInputInterfaces.interface";
+import { AuthContext } from "../../../context/AuthContext.context";
+import InformationNotification from "../../../components/InformationNotification.component";
 
 export interface ICatalogItemDetailModal {
   opened: boolean;
@@ -49,6 +51,13 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
   function handleDeleteItem() {
     deleteItemMutation?.mutate(itemId);
   }
+
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("AuthContext must be used within an AuthProvider");
+  }
+
+  const { isLoggedIn } = authContext;
 
   useEffect(() => {
     if (deleteItemMutation?.isSuccess) {
@@ -141,40 +150,50 @@ const CatalogItemDetailModal: React.FC<ICatalogItemDetailModal> = ({
                 {description}
               </Text>
             </Stack>
-            <Grid className="absolute bottom-0 right-0 left-[422px]">
-              <Grid.Col span={3} className="">
-                <Group className="flex-nowrap">
-                  <IconTrashFilled
-                    size={36}
-                    color={theme.colors["white"][5]}
-                    onClick={() => {
-                      setOpenedDelete(true);
-                    }}
-                    className="h-10 w-full p-[6px] rounded-full bg-dark-red cursor-pointer border border-dark-red"
-                  />
-                  <IconEditFilled
-                    size={36}
-                    color={theme.colors["orange"][5]}
-                    onClick={() => {
-                      setOpenedEdit(true);
-                    }}
-                    className="h-10 w-full p-[6px] rounded-full bg-white cursor-pointer border-2 border-orange"
-                  />
-                </Group>
-              </Grid.Col>
+            {isLoggedIn ? (
+              <Grid className="absolute bottom-0 right-0 left-[422px]">
+                <Grid.Col span={3} className="">
+                  <Group className="flex-nowrap">
+                    <IconTrashFilled
+                      size={36}
+                      color={theme.colors["white"][5]}
+                      onClick={() => {
+                        setOpenedDelete(true);
+                      }}
+                      className="h-10 w-full p-[6px] rounded-full bg-dark-red cursor-pointer border border-dark-red"
+                    />
+                    <IconEditFilled
+                      size={36}
+                      color={theme.colors["orange"][5]}
+                      onClick={() => {
+                        setOpenedEdit(true);
+                      }}
+                      className="h-10 w-full p-[6px] rounded-full bg-white cursor-pointer border-2 border-orange"
+                    />
+                  </Group>
+                </Grid.Col>
 
-              <Grid.Col span={9}>
-                <Button
-                  size="md"
-                  className="rounded-full bg-red hover:bg-light-red duration-200 w-full"
-                  onClick={() => {
-                    setOpenedLentItem(true);
-                  }}
-                >
-                  Pinjam
-                </Button>
-              </Grid.Col>
-            </Grid>
+                <Grid.Col span={9}>
+                  <Button
+                    size="md"
+                    className="rounded-full bg-red hover:bg-light-red duration-200 w-full"
+                    onClick={() => {
+                      setOpenedLentItem(true);
+                    }}
+                  >
+                    Pinjam
+                  </Button>
+                </Grid.Col>
+              </Grid>
+            ) : (
+              <div className="absolute bottom-0 right-0 left-[422px] text-red">
+                <InformationNotification
+                  info={
+                    "Untuk meminjam barang, silahkan datang ke departemen dengan membawa Kartu Mahasiswa (KTM) "
+                  }
+                />
+              </div>
+            )}
           </Stack>
         </Group>
       </MyModal>

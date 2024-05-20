@@ -1,25 +1,17 @@
 import {
-  Button,
   Group,
-  SimpleGrid,
   Stack,
   Text,
   useMantineTheme
 } from "@mantine/core";
 import React, { useState } from "react";
-import noItem from "../../../assets/images/no-item.png";
-import {
-  IconEditFilled,
-  IconRightArrow,
-  IconRightArrowNoTail,
-  IconTrashFilled
-} from "../../../assets/icons/Fluent";
-import MyModal from "../../../components/MyModal.component";
-import WarningModal from "../../../components/WarningModal.component";
-import EditNewCatalogModal from "./EditNewCatalogModal.component";
-import CatalogItemDetailModal from "./CatalogItemDetailModal.component";
 import { UseMutationResult } from "react-query";
-import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
+import {
+  IconRightArrowNoTail
+} from "../../../assets/icons/Fluent";
+import noItem from "../../../assets/images/no-item.png";
+import { IEditItem } from "../../../utils/query/item-query";
+import CatalogItemDetailModal from "./CatalogItemDetailModal.component";
 import { ILentItem } from "./CatalogItemInputInterfaces.interface";
 
 export interface ICatalogItem {

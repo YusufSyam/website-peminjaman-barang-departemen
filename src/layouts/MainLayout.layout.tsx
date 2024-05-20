@@ -2,7 +2,7 @@ import { AppShell, Stack } from "@mantine/core";
 import React from "react";
 import Header from "./headers/Header.layout";
 
-export type TPageName = "Beranda" | "Aktivitas";
+export type TPageName = "Beranda" | "Aktivitas" | "";
 
 export interface IMainLayout {
   children: JSX.Element;

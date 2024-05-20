@@ -1,38 +1,36 @@
-import React, { useEffect, useState } from "react";
-import MainLayout from "../../layouts/MainLayout.layout";
 import {
   Divider,
-  Grid,
   Group,
-  SimpleGrid,
   Stack,
   Text,
   useMantineTheme
 } from "@mantine/core";
-import ActivityItem, { IActivityItem } from "./ActivityItem.component";
+import React, { useContext, useEffect, useState } from "react";
+import MainLayout from "../../layouts/MainLayout.layout";
+
+import { useDebouncedValue } from "@mantine/hooks";
+import { useQuery } from "react-query";
+import noItem from "../../assets/images/no-item.png";
+import {
+  IconReplyOutline,
+  IconShareWindowsOutline
+} from "../../assets/icons/Fluent";
 import {
   MyDatePickerInput,
-  MySearchInput,
-  MyTextInput
+  MySearchInput
 } from "../../components/FormInput.component";
-import {
-  IconAddFilled,
-  IconReplyOutline,
-  IconShareWindowsOutline,
-  SearchFilled
-} from "../../assets/icons/Fluent";
-import ActivityTableComponent, {
-  IFETableHeadingProps,
-  IFETableRowColumnProps
-} from "./ActivityTable.component";
 import { dummyBorrowActivities } from "../../utils/const/dummy";
 import {
   formatDateDetection,
   formatDateNormal
 } from "../../utils/function/date.function";
-import { useDebouncedValue } from "@mantine/hooks";
 import { qfFetchAllLentActivity } from "../../utils/query/item-query";
-import { useQuery } from "react-query";
+import ActivityTableComponent, {
+  IFETableHeadingProps,
+  IFETableRowColumnProps
+} from "./ActivityTable.component";
+import { AuthContext } from "../../context/AuthContext.context";
+import NotFound from "../not-found/NotFound.page";
 
 export interface IActivity {}
 
@@ -154,7 +152,7 @@ const Activity: React.FC<IActivity> = ({}) => {
   useEffect(() => {
     const lowerQuery = query?.toLowerCase();
 
-    let tempActivity = dummyBorrowActivities?.filter(
+    let tempActivity = borrowActivities?.filter(
       (d: IBorrowActivity) =>
         d?.itemName?.toLowerCase()?.includes(lowerQuery) ||
         d?.borrower?.toLowerCase()?.includes(lowerQuery)
@@ -203,7 +201,10 @@ const Activity: React.FC<IActivity> = ({}) => {
           element: (
             <Stack className="gap-2">
               <Stack className="w-24 h-20 m-auto overflow-hidden rounded-2xl">
-                <img src={data.itemImage} className="w-24 h-20 object-cover" />
+                <img
+                  src={data.itemImage == "" ? noItem : data.itemImage}
+                  className="w-24 h-20 object-cover"
+                />
               </Stack>
               <Text className="text-primary-text-500 font-poppins">
                 {data.itemName}
@@ -322,6 +323,18 @@ const Activity: React.FC<IActivity> = ({}) => {
   }
 
   console.log(selectedDate, "selectedDate");
+
+  
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("AuthContext must be used within an AuthProvider");
+  }
+
+  const { isLoggedIn } = authContext;
+  
+  if(!isLoggedIn){
+    return <NotFound />
+  }
 
   return (
     <MainLayout activePage="Aktivitas">

@@ -8,7 +8,7 @@ import {
   useMantineTheme
 } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { IconAddFilled } from "../../../assets/icons/Fluent";
 import { MySearchInput } from "../../../components/FormInput.component";
@@ -23,6 +23,7 @@ import {
 import AddNewCatalogModal from "./AddNewCatalogModal.component";
 import CatalogItem, { ICatalogItem } from "./CatalogItem.component";
 import LoadingModal from "../../../components/LoadingModal.component";
+import { AuthContext } from "../../../context/AuthContext.context";
 
 export interface ICatalog {}
 
@@ -87,6 +88,13 @@ const Catalog: React.FC<ICatalog> = ({}) => {
 
   console.log(data, "data");
 
+  const authContext = useContext(AuthContext);
+  if (!authContext) {
+    throw new Error("AuthContext must be used within an AuthProvider");
+  }
+
+  const { isLoggedIn } = authContext;
+
   const [formattedData, setFormattedData] = useState(
     formatCatalogItem(data?.data || [])
   );
@@ -101,7 +109,7 @@ const Catalog: React.FC<ICatalog> = ({}) => {
 
   const [activePage, setActivePage] = useState<number>(1);
   const [pageAmt, setPageAmt] = useState(0);
-  const dataPerPageAmt = 20;
+  const dataPerPageAmt = 8;
 
   const [openedAddItem, setOpenedAddItem] = useState(false);
 
@@ -164,21 +172,23 @@ const Catalog: React.FC<ICatalog> = ({}) => {
             w={280}
             placeholder="Cari barang . . ."
           />
-          <Button
-            className="bg-green hover:bg-light-green duration-100 rounded-full"
-            onClick={() => {
-              setOpenedAddItem(true);
-            }}
-            size="md"
-            leftIcon={
-              <IconAddFilled
-                color={theme.colors["white"][5]}
-                className="-ml-[2px]"
-              />
-            }
-          >
-            Tambah Barang
-          </Button>
+          {isLoggedIn && (
+            <Button
+              className="bg-green hover:bg-light-green duration-100 rounded-full"
+              onClick={() => {
+                setOpenedAddItem(true);
+              }}
+              size="md"
+              leftIcon={
+                <IconAddFilled
+                  color={theme.colors["white"][5]}
+                  className="-ml-[2px]"
+                />
+              }
+            >
+              Tambah Barang
+            </Button>
+          )}
         </Group>
       </Group>
       {isFetching ? (
