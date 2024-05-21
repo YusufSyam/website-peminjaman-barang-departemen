@@ -79,7 +79,7 @@ const WarningModal = ({
         )}
         <Group className="self-end mt-4 gap-6">
           <Button
-            className="!text-red !border-white bg-white hover:!bg-white rounded-full"
+            className="text-red !border-white bg-white hover:!bg-white rounded-full"
             disabled={disableNoButton}
             onClick={() => setOpened(false)}
             size="md"

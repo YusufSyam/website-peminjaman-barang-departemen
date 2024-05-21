@@ -8,37 +8,22 @@ export interface IAddNewItem {
   name: string;
   stock: number;
   description: string;
-  thumbnail: File;
+  thumbnail: string;
 }
 
-export async function qfAddItem({
-  description,
-  name,
-  stock,
-  thumbnail
-}: IAddNewItem) {
-  const accessToken = localStorage?.getItem("accessToken");
-
-  const formData = new FormData();
-
-  formData.append("name", name);
-  formData.append("description", description);
-  formData.append("stock", (stock+""));
-  formData.append("thumbnail", thumbnail);
+export async function qfAddItem(values : IAddNewItem) {
 
   const response = await fetch(`${endpoint}`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'multipart/form-data',
+      ...getTokenAuthorizationHeader()
     },
     mode: "cors",
     credentials: "same-origin",
-    body: formData
+    body: JSON.stringify(values)
   });
 
-  const data = await response.json();
-
+  const data = await response.json()
   console.log("INI RESPONSE", data);
 
   return data;

@@ -24,17 +24,25 @@ import AddNewCatalogModal from "./AddNewCatalogModal.component";
 import CatalogItem, { ICatalogItem } from "./CatalogItem.component";
 import LoadingModal from "../../../components/LoadingModal.component";
 import { AuthContext } from "../../../context/AuthContext.context";
+import { BASE_URL } from "../../../utils/const/api";
+import WarningModal from "../../../components/WarningModal.component";
 
 export interface ICatalog {}
 
 function formatCatalogItem(beData: any[] = []) {
   const formatted = beData?.map((d) => {
+    const imageLinkSplit = d?.thumbnail?.split("media\\");
+    const imageLink =
+      imageLinkSplit.length > 1
+        ? `${BASE_URL}/uploaded-file/${imageLinkSplit[1]}`
+        : "";
+
     const data: ICatalogItem = {
       itemId: d?.itemId,
       label: d?.name,
       stock: d?.totalItem,
       borrowed: d?.totalItem - d?.stock,
-      image: d?.thumbnail,
+      image: imageLink,
       description: d?.description
     };
 
@@ -69,8 +77,20 @@ const Catalog: React.FC<ICatalog> = ({}) => {
   });
 
   const postLentItemMutation = useMutation("post-lent-item", qfLentItem, {
-    onSuccess() {
-      refetch();
+    onSuccess(data) {
+      if (data?.status === "success") {
+        refetch();
+      } else {
+        if (data?.error?.code === "E444") {
+          setErrorMessage(
+            "Mahasiswa belum terdaftar, silahkan daftarkan mahasiswa terlebih dahulu untuk melanjutkan peminjaman"
+          );
+        } else {
+          setErrorMessage(data?.error?.message || "");
+        }
+
+        setOpenedErrorAddItem(true)
+      }
     }
   });
 
@@ -112,6 +132,8 @@ const Catalog: React.FC<ICatalog> = ({}) => {
   const dataPerPageAmt = 8;
 
   const [openedAddItem, setOpenedAddItem] = useState(false);
+  const [openedErrorAddItem, setOpenedErrorAddItem] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>): void {
     setSearchTerm(e.target.value);
@@ -155,8 +177,8 @@ const Catalog: React.FC<ICatalog> = ({}) => {
     setCatalogList(tempCatalogList);
   }, [query, formattedData]);
 
-  console.log("formatCatalogItemlll", formattedData)
-  console.log("formatCatalogItemlll", catalogList)
+  console.log("formatCatalogItemlll", formattedData);
+  console.log("formatCatalogItemlll", catalogList);
   return (
     <Stack>
       <AddNewCatalogModal
@@ -256,6 +278,18 @@ const Catalog: React.FC<ICatalog> = ({}) => {
           deleteItemMutation.isLoading ||
           postLentItemMutation.isLoading
         }
+      />
+      <WarningModal
+        opened={openedErrorAddItem}
+        setOpened={setOpenedErrorAddItem}
+        title={"Terjadi Kesalahan"}
+        onClose={() => {}}
+        onSubmit={()=>{
+          setOpenedErrorAddItem(false)
+        }}
+        disableNoButton
+        yesButtonLabel="Oke"
+        children={errorMessage}
       />
     </Stack>
   );

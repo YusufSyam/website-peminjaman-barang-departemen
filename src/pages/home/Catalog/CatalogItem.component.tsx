@@ -4,7 +4,7 @@ import {
   Text,
   useMantineTheme
 } from "@mantine/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UseMutationResult } from "react-query";
 import {
   IconRightArrowNoTail
@@ -39,6 +39,12 @@ const CatalogItem: React.FC<ICatalogItem> = ({
 }) => {
   const theme = useMantineTheme();
   const isAvailable = (stock-borrowed>0);
+
+  useEffect(()=>{
+    if(postLentItemMutation?.isSuccess){
+      setOpened(false)
+    }
+  },[postLentItemMutation?.isSuccess])
 
   const [opened, setOpened] = useState(false);
 

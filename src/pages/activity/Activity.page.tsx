@@ -39,6 +39,7 @@ import NotFound from "../not-found/NotFound.page";
 import MyModal from "../../components/MyModal.component";
 import WarningModal from "../../components/WarningModal.component";
 import LoadingModal from "../../components/LoadingModal.component";
+import { BASE_URL } from "../../utils/const/api";
 
 export interface IActivity {}
 
@@ -57,6 +58,9 @@ export interface IBorrowActivity {
 
 function formatLentActivity(beData: any[] = []) {
   const formatted = beData?.map((d) => {
+    const imageLinkSplit = d?.item.itemThumbnail?.split("media\\")
+    const imageLink = imageLinkSplit.length > 1 ? `${BASE_URL}/uploaded-file/${imageLinkSplit[1]}` : ""
+
     const data: IBorrowActivity = {
       activityType: d?.status == "LENT" ? "borrow" : "return",
       borrowDate: new Date(d?.lendStartTime),
@@ -64,7 +68,7 @@ function formatLentActivity(beData: any[] = []) {
       supposedReturnDate: new Date(d?.lendEndTime),
       borrower: d?.student.name,
       nim: d?.student.studentId,
-      itemImage: d?.item.itemThumbnail,
+      itemImage: imageLink,
       itemName: d?.item.name,
       id: d?.id,
       actualReturnDate: new Date()
@@ -270,7 +274,7 @@ const Activity: React.FC<IActivity> = ({}) => {
                 {data.borrower}
               </Text>
               <Text className="font-poppins text-lg text-secondary-text-500">
-                (H071191044)
+                ({data?.nim})
               </Text>
             </Stack>
           )

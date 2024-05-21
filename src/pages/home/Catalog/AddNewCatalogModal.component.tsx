@@ -15,6 +15,7 @@ import { useForm, yupResolver } from "@mantine/form";
 import instance from "../../../utils/http";
 import { UseMutationResult, useMutation } from "react-query";
 import { IAddNewItem, qfAddItem } from "../../../utils/query/item-query";
+import { qfUploadFile } from "../../../utils/query/files-query";
 
 export interface IAddNewCatalogModal {
   opened: boolean;
@@ -31,17 +32,34 @@ const AddNewCatalogModal: React.FC<IAddNewCatalogModal> = ({
     validate: yupResolver(AddNewCatalogItemSchema)
   });
 
-  function handleAddCatalogItem() {
-    console.log(values, "values");
-    postAddItemMutation.mutate({
-      name: values.itemName,
-      description: values.description,
-      stock: values.stock,
-      thumbnail: values.image
-    });
+  
+
+  const postFileMutation = useMutation("post-upload-file", qfUploadFile, {
+    onSuccess(data) {
+        const fileName= data?.data
+
+        postAddItemMutation.mutate({
+          name: values.itemName,
+          description: values.description,
+          stock: values.stock,
+          thumbnail: fileName
+        });
+
+        setOpened(false)
+    }
+  });
+
+  // function handleAddCatalogItem() {
+  //   console.log(values, "values");
+  //   postAddItemMutation.mutate({
+  //     name: values.itemName,
+  //     description: values.description,
+  //     stock: values.stock,
+  //     thumbnail: values.image
+  //   });
     
-    setOpened(false)
-  }
+  //   setOpened(false)
+  // }
 
   const {
     getInputProps,
@@ -138,7 +156,9 @@ const AddNewCatalogModal: React.FC<IAddNewCatalogModal> = ({
           maxSize={100_000_000}
         />
         <Button
-          onClick={handleAddCatalogItem}
+          onClick={()=>{
+            postFileMutation.mutate(values?.image)
+          }}
           className="bg-green hover:bg-light-green rounded-full duration-100"
           disabled={
             values?.image == null ||
