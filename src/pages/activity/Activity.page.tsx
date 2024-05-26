@@ -54,6 +54,7 @@ export interface IBorrowActivity {
   supposedReturnDate?: Date;
   actualReturnDate?: Date;
   additionalInformation: string;
+  roomName?: string;
 }
 
 function formatLentActivity(beData: any[] = []) {
@@ -71,6 +72,7 @@ function formatLentActivity(beData: any[] = []) {
       itemImage: imageLink,
       itemName: d?.item.name,
       id: d?.id,
+      roomName: d?.roomName,
       actualReturnDate: new Date()
     };
 
@@ -108,7 +110,7 @@ const tableHeadings: IFETableHeadingProps[] = [
     width: "210px"
   },
   {
-    label: "Detail Waktu",
+    label: "Detail",
     sortable: true,
     textAlign: "center",
     cellKey: "timeDetail"
@@ -309,24 +311,24 @@ const Activity: React.FC<IActivity> = ({}) => {
         timeDetail: {
           label: data.itemName,
           element: (
-            <Stack className="w-fit mx-auto">
-              <Group className="gap-2">
+            <Stack className="w-fit mx-auto gap-4">
+              <Stack className="self-start text-start gap-0">
                 <Text className="font-semibold text-primary-text">
-                  Peminjaman
+                  Waktu Peminjaman
                 </Text>
                 <Text className="text-primary-text">
                   {formatDateNormal(data.borrowDate)}
                 </Text>
-              </Group>
-              <Divider />
-              <Group className="gap-2">
+              </Stack>
+              {/* <Divider /> */}
+              <Stack className="self-start text-start gap-0">
                 <Text className="font-semibold text-primary-text">
-                  Pengembalian Barang
+                  Tempat
                 </Text>
                 <Text className="text-primary-text">
-                  {formatDateNormal(data.supposedReturnDate || new Date())},{" "}
+                  {data.roomName}
                 </Text>
-              </Group>
+              </Stack>
               {/* {data.activityType == "return" && (
                 <>
                   <Divider />
