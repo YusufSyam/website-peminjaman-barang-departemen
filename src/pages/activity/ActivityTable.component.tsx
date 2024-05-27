@@ -10,7 +10,6 @@ import {
 } from "@mantine/core";
 import React from "react";
 import {
-  IconAddFilled,
   IconCalendarEmptyOutline
 } from "../../assets/icons/Fluent";
 import Loading from "../../components/Loading.component";
@@ -122,22 +121,17 @@ const aciontBtnClsNames: { [x in IActionButtonBgColor]: string } = {
 };
 
 const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
-  tableTitle,
   tableHeadings,
   tableRows,
   actions,
   noDataMsg,
   isLoading,
-  onSearch,
   dataPerPageAmt,
   activePage,
   onPageChange,
   actionOrientation = "horizontal",
   actionColumnWidth = "fit-content",
   actionColumnRounded = true,
-  onProgressData = 0,
-  tableHeaderAction,
-  withSearch = true,
   onEachRowHovered,
   showTableHeader = false
 }) => {
@@ -148,17 +142,12 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
 
   const pageAmt = Math.round(tableRows?.length / dataPerPageAmt + 0.4);
 
-  function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
-    onSearch && onSearch(e.target.value);
-  }
 
   function handlePageChange(e: number) {
     onPageChange && onPageChange(e);
   }
 
   const theme = useMantineTheme();
-
-  const addIcon = <IconAddFilled className={`mr-1 mb-[1px]`} size={14} />;
 
   const paginationComp = (
     <>

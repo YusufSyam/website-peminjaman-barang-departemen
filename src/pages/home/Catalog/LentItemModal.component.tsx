@@ -1,24 +1,18 @@
-import { Stack, Button, Group, Text } from "@mantine/core";
-import { MIME_TYPES } from "@mantine/dropzone";
+import { Button, Group, Stack, Text } from "@mantine/core";
+import { useForm, yupResolver } from "@mantine/form";
 import React, { useEffect } from "react";
-import DocumentInput from "../../../components/DocumentInput.component";
+import { UseMutationResult } from "react-query";
+import FotoKTM from "../../../assets/images/ktm.png";
 import {
-  MyTextInput,
-  MyNumberInput,
-  MyDateTimePickerInput
+  MyDateTimePickerInput,
+  MyTextInput
 } from "../../../components/FormInput.component";
 import MyModal from "../../../components/MyModal.component";
 import {
-  AddNewCatalogItemSchema,
   IEditCatalogItemInterfaces,
   ILentItem,
   LentItemSchema
 } from "./CatalogItemInputInterfaces.interface";
-import { useForm, yupResolver } from "@mantine/form";
-import { UseMutationResult } from "react-query";
-import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
-import FotoKTM from "../../../assets/images/ktm.png";
-import QR from "../../../assets/images/qr.png";
 
 export interface ILentItemModal {
   opened: boolean;
@@ -40,12 +34,9 @@ const LentItemModal: React.FC<ILentItemModal> = ({
   const {
     getInputProps,
     errors,
-    isDirty,
     values,
     setValues,
     reset,
-    isValid,
-    onSubmit
   } = form;
 
   function handleLentItem() {

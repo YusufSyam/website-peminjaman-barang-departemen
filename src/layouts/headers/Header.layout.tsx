@@ -1,19 +1,16 @@
 import { Grid, Group, Stack, Text } from "@mantine/core";
+import React, { useContext, useState } from "react";
+import { useMutation } from "react-query";
+import { useNavigate } from "react-router-dom";
+import { IconLoginOutline, IconLogoutOutline } from "../../assets/icons/Fluent";
 import unhasLogo from "../../assets/images/logo-unhas.png";
-import React, { useContext, useEffect, useState } from "react";
-import HeaderMenu from "./HeaderMenu.component";
+import LoadingModal from "../../components/LoadingModal.component";
+import WarningModal from "../../components/WarningModal.component";
+import { AuthContext } from "../../context/AuthContext.context";
 import { MAINROUTES } from "../../utils/const/routes";
 import { TPageName } from "../MainLayout.layout";
-import { IconLoginOutline, IconLogoutOutline } from "../../assets/icons/Fluent";
-import { qfLogin } from "../../utils/query/user-query";
-import { useMutation } from "react-query";
+import HeaderMenu from "./HeaderMenu.component";
 import LoginModal from "./LoginModal.component";
-import AlertModal from "../../components/AlertModal.component";
-import WarningModal from "../../components/WarningModal.component";
-import LoadingModal from "../../components/LoadingModal.component";
-import ConfirmationModal from "../../components/ConfirmationModal.component";
-import { AuthContext } from "../../context/AuthContext.context";
-import { useNavigate } from "react-router-dom";
 
 export interface IHeader {
   activePage: TPageName;

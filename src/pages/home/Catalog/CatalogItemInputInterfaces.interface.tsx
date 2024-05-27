@@ -11,7 +11,7 @@ export interface IEditCatalogItemInterfaces {
   name: string;
   stock: number;
   description: string;
-  thumbnail: File;
+  thumbnail: string;
 }
 
 export interface ILentItem {

@@ -1,6 +1,5 @@
 import {
   Checkbox,
-  Divider,
   Group,
   Stack,
   Text,
@@ -11,16 +10,18 @@ import MainLayout from "../../layouts/MainLayout.layout";
 
 import { useDebouncedValue } from "@mantine/hooks";
 import { useMutation, useQuery } from "react-query";
-import noItem from "../../assets/images/no-item.png";
 import {
   IconReplyOutline,
   IconShareWindowsOutline
 } from "../../assets/icons/Fluent";
+import noItem from "../../assets/images/no-item.png";
 import {
-  MyDatePickerInput,
   MySearchInput
 } from "../../components/FormInput.component";
-import { dummyBorrowActivities } from "../../utils/const/dummy";
+import LoadingModal from "../../components/LoadingModal.component";
+import WarningModal from "../../components/WarningModal.component";
+import { AuthContext } from "../../context/AuthContext.context";
+import { BASE_URL } from "../../utils/const/api";
 import {
   formatDateDetection,
   formatDateNormal
@@ -29,17 +30,12 @@ import {
   qfFetchAllLentActivity,
   qfReturnItem
 } from "../../utils/query/item-query";
+import NotFound from "../not-found/NotFound.page";
 import ActivityTableComponent, {
   IActivityTableAction,
   IFETableHeadingProps,
   IFETableRowColumnProps
 } from "./ActivityTable.component";
-import { AuthContext } from "../../context/AuthContext.context";
-import NotFound from "../not-found/NotFound.page";
-import MyModal from "../../components/MyModal.component";
-import WarningModal from "../../components/WarningModal.component";
-import LoadingModal from "../../components/LoadingModal.component";
-import { BASE_URL } from "../../utils/const/api";
 
 export interface IActivity {}
 
@@ -133,13 +129,7 @@ const tableHeadings: IFETableHeadingProps[] = [
 const Activity: React.FC<IActivity> = ({}) => {
   const {
     data,
-    isFetching,
-    isLoading,
-    isError,
-    error,
     refetch,
-    isSuccess,
-    isRefetching
   } = useQuery(`fetch-all-lent`, qfFetchAllLentActivity, {
     onSuccess(data) {
       console.log(data, "dasdasdasd");
@@ -162,7 +152,7 @@ const Activity: React.FC<IActivity> = ({}) => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [query] = useDebouncedValue(searchTerm, 500);
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedDate] = useState<Date | null>(null);
   const [selectedRow, setSelectedRow] = useState(0);
   const [isReturnItemModalOpened, setIsReturnItemModalOpened] = useState(false);
   const [isJustLentChecked, setIsJustLentChecked] = useState(false);
@@ -486,7 +476,7 @@ const Activity: React.FC<IActivity> = ({}) => {
             noDataMsg=""
             isLoading={false}
             dataPerPageAmt={amtDataPerPage}
-            onSearch={(value) => {
+            onSearch={() => {
               // console.log("Searching for: ", value);
             }}
             onPageChange={setActivePage}

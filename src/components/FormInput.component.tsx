@@ -1,33 +1,25 @@
 import {
-  TextInput as MantineTextInput,
-  TextInputProps,
-  TextInputStylesNames,
-  SelectProps,
-  Styles,
   NumberInput as MantineNumberInput,
+  TextInput as MantineTextInput,
   NumberInputProps,
   NumberInputStylesNames,
-  useMantineTheme,
-  SelectStylesNames,
-  Select,
-  Radio,
-  RadioGroupProps,
-  RadioProps,
-  Textarea as MantineTextArea,
-  TextareaProps,
+  PasswordInput,
   PasswordInputProps,
-  PasswordInput
+  SelectStylesNames,
+  Styles,
+  TextInputProps,
+  TextInputStylesNames,
+  useMantineTheme
 } from "@mantine/core";
 import {
-  DatePickerInputProps,
   DatePickerInput,
-  DateTimePickerProps,
-  DateTimePicker
+  DatePickerInputProps,
+  DateTimePicker,
+  DateTimePickerProps
 } from "@mantine/dates";
 import { useState } from "react";
 import {
   IconCalendarLtrOutline,
-  IconSearchOutlined,
   SearchFilled
 } from "../assets/icons/Fluent";
 
@@ -288,7 +280,6 @@ export const MyDateTimePickerInput = ({
   ...props
 }: DateTimePickerProps) => {
   const [isFocus, setIsFocus] = useState<boolean>(false);
-  const theme = useMantineTheme();
   return (
     <DateTimePicker
       placeholder={"Masukkan Tanggal"}

@@ -1,19 +1,17 @@
-import { Stack, Button } from "@mantine/core";
-import { MIME_TYPES } from "@mantine/dropzone";
+import { Button, Stack } from "@mantine/core";
+import { useForm, yupResolver } from "@mantine/form";
 import React, { useEffect } from "react";
-import DocumentInput from "../../../components/DocumentInput.component";
+import { UseMutationResult } from "react-query";
 import {
-  MyTextInput,
-  MyNumberInput
+  MyNumberInput,
+  MyTextInput
 } from "../../../components/FormInput.component";
 import MyModal from "../../../components/MyModal.component";
+import { IEditItem } from "../../../utils/query/item-query";
 import {
   AddNewCatalogItemSchema,
   IEditCatalogItemInterfaces
 } from "./CatalogItemInputInterfaces.interface";
-import { useForm, yupResolver } from "@mantine/form";
-import { UseMutationResult } from "react-query";
-import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
 
 export interface IEditNewCatalogModal {
   opened: boolean;
@@ -31,7 +29,6 @@ const EditNewCatalogModal: React.FC<IEditNewCatalogModal> = ({
   setOpened,
   putEditItemMutation,
   description,
-  image,
   itemId,
   label,
   stock
@@ -43,12 +40,8 @@ const EditNewCatalogModal: React.FC<IEditNewCatalogModal> = ({
   const {
     getInputProps,
     errors,
-    isDirty,
     values,
-    setValues,
     reset,
-    isValid,
-    onSubmit
   } = form;
 
   function handleEditCatalogItem() {
@@ -102,7 +95,7 @@ const EditNewCatalogModal: React.FC<IEditNewCatalogModal> = ({
           defaultValue={description}
         />
         
-        <DocumentInput
+        {/* <DocumentInput
           withDelete
           {...getInputProps("thumbnail")}
           required
@@ -114,7 +107,7 @@ const EditNewCatalogModal: React.FC<IEditNewCatalogModal> = ({
             errors[`${"thumbnail" as keyof IEditCatalogItemInterfaces}.name`]
           }
           maxSize={100_000_000}
-        />
+        /> */}
         <Button
           onClick={handleEditCatalogItem}
           className="bg-green hover:bg-light-green rounded-full duration-100"

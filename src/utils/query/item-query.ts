@@ -1,6 +1,5 @@
 import { ILentItem } from "../../pages/home/Catalog/CatalogItemInputInterfaces.interface";
 import { BASE_URL, getTokenAuthorizationHeader } from "../const/api";
-import { ParseFileBase64 } from "../function/misc.function";
 
 const endpoint = `${BASE_URL}/items`;
 

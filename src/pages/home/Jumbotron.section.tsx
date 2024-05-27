@@ -1,4 +1,4 @@
-import { Grid, Group, MediaQuery, Stack, Text } from "@mantine/core";
+import { Grid, Stack, Text } from "@mantine/core";
 import React from "react";
 import { StickerInventory } from "../../assets/icons/Fluent";
 

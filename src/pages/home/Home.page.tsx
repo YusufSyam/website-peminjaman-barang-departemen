@@ -1,8 +1,8 @@
+import { Stack } from "@mantine/core";
 import React from "react";
 import MainLayout from "../../layouts/MainLayout.layout";
-import { Group, Stack, Text } from "@mantine/core";
-import Jumbotron from "./Jumbotron.section";
 import Catalog from "./Catalog/Catalog.section";
+import Jumbotron from "./Jumbotron.section";
 
 export interface IHome {}
 

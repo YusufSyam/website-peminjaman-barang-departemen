@@ -1,5 +1,5 @@
 import { ILoginInput } from "../../layouts/headers/LoginModal.component";
-import { BASE_URL, getTokenAuthorizationHeader } from "../const/api";
+import { BASE_URL } from "../const/api";
 
 const endpoint = `${BASE_URL}/users`;
 

@@ -1,14 +1,10 @@
 import {
-  Button,
-  Group,
-  useMantineTheme,
-  Text,
-  ButtonProps,
-  Stack
+  Stack,
+  Text
 } from "@mantine/core";
 import React from "react";
-import Modal from "./MyModal.component";
 import Loading from "./Loading.component";
+import Modal from "./MyModal.component";
 
 interface ILoadingModalProps {
   opened: boolean;
@@ -23,13 +19,9 @@ interface ILoadingModalProps {
 
 const LoadingModal = ({
   opened,
-  title = "Dalam Proses",
   description = "Dalam proses penyelesaian, silahkan tunggu..",
-  canBeClosed = false,
   setOpened=()=>{}
 }: ILoadingModalProps) => {
-  const theme = useMantineTheme();
-
   return (
     <Modal
       opened={opened}

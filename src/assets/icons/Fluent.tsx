@@ -41,9 +41,6 @@ export function IconLogoutOutline({
 
 export function StickerInventory({
   size = 24,
-  color = "black",
-  onClick,
-  className
 }: IFluentProps) {
   return (
     <svg

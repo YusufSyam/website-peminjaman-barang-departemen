@@ -23,7 +23,6 @@ const DatePickerModal: React.FC<IDatePickerModal> = ({
   title = "Ganti Tanggal",
   minDate,
   maxDate = new Date(),
-  onCancel = () => {},
   onSubmit = () => {},
   defaultValue = new Date(),
   subTitle="Lihat riwayat deteksi pada hari lain"

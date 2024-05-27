@@ -1,16 +1,14 @@
 import {
-  Button,
   Group,
-  useMantineTheme,
-  Text,
-  ButtonProps,
+  ModalProps,
   Stack,
-  ModalProps
+  Text,
+  useMantineTheme
 } from "@mantine/core";
 import React from "react";
-import Modal from "./MyModal.component";
+import { IconQuestionMarkCircleFilled } from "../assets/icons/Fluent";
 import { SmallButton } from "./MyButton";
-import { IconQuestionMarkCircleFilled, IconReportFilled, IconReportOutlined } from "../assets/icons/Fluent";
+import Modal from "./MyModal.component";
 
 interface IAlertModal {
   opened: boolean;

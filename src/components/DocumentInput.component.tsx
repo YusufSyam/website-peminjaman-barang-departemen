@@ -36,7 +36,6 @@ interface IDocumentInputProps
 }
 
 const DocumentInput: React.FC<IDocumentInputProps> = ({
-  error,
   size = "lg",
   onChange,
   label,

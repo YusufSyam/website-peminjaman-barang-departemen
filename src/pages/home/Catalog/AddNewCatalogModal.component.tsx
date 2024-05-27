@@ -1,21 +1,20 @@
-import { Stack, Button } from "@mantine/core";
+import { Button, Stack } from "@mantine/core";
 import { MIME_TYPES } from "@mantine/dropzone";
+import { useForm, yupResolver } from "@mantine/form";
 import React, { useEffect } from "react";
+import { UseMutationResult, useMutation } from "react-query";
 import DocumentInput from "../../../components/DocumentInput.component";
 import {
-  MyTextInput,
-  MyNumberInput
+  MyNumberInput,
+  MyTextInput
 } from "../../../components/FormInput.component";
 import MyModal from "../../../components/MyModal.component";
+import { qfUploadFile } from "../../../utils/query/files-query";
+import { IAddNewItem } from "../../../utils/query/item-query";
 import {
   AddNewCatalogItemSchema,
   IAddNewCatalogItemInterfaces
 } from "./CatalogItemInputInterfaces.interface";
-import { useForm, yupResolver } from "@mantine/form";
-import instance from "../../../utils/http";
-import { UseMutationResult, useMutation } from "react-query";
-import { IAddNewItem, qfAddItem } from "../../../utils/query/item-query";
-import { qfUploadFile } from "../../../utils/query/files-query";
 
 export interface IAddNewCatalogModal {
   opened: boolean;
@@ -64,12 +63,8 @@ const AddNewCatalogModal: React.FC<IAddNewCatalogModal> = ({
   const {
     getInputProps,
     errors,
-    isDirty,
     values,
-    setValues,
     reset,
-    isValid,
-    onSubmit
   } = form;
 
   // async function handleAddCatalogItem() {

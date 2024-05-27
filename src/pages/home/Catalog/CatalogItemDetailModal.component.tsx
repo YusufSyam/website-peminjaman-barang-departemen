@@ -7,16 +7,16 @@ import {
   useMantineTheme
 } from "@mantine/core";
 import React, { useContext, useEffect, useState } from "react";
-import { IconTrashFilled, IconEditFilled } from "../../../assets/icons/Fluent";
+import { UseMutationResult } from "react-query";
+import { IconEditFilled, IconTrashFilled } from "../../../assets/icons/Fluent";
+import InformationNotification from "../../../components/InformationNotification.component";
 import MyModal from "../../../components/MyModal.component";
 import WarningModal from "../../../components/WarningModal.component";
-import EditNewCatalogModal from "./EditNewCatalogModal.component";
-import { UseMutationResult } from "react-query";
-import { IAddNewItem, IEditItem } from "../../../utils/query/item-query";
-import LentItemModal from "./LentItemModal.component";
-import { ILentItem } from "./CatalogItemInputInterfaces.interface";
 import { AuthContext } from "../../../context/AuthContext.context";
-import InformationNotification from "../../../components/InformationNotification.component";
+import { IEditItem } from "../../../utils/query/item-query";
+import { ILentItem } from "./CatalogItemInputInterfaces.interface";
+import EditNewCatalogModal from "./EditNewCatalogModal.component";
+import LentItemModal from "./LentItemModal.component";
 
 export interface ICatalogItemDetailModal {
   opened: boolean;

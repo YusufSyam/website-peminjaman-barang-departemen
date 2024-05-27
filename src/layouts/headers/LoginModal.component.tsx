@@ -1,16 +1,12 @@
-import { Stack, Button, Text } from "@mantine/core";
-import { MIME_TYPES } from "@mantine/dropzone";
+import { Button, Stack, Text } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import React, { useContext, useEffect } from "react";
+import React, { useEffect } from "react";
 import { UseMutationResult } from "react-query";
-import DocumentInput from "../../components/DocumentInput.component";
 import {
-  MyTextInput,
-  MyNumberInput,
-  MyPasswordInput
+  MyPasswordInput,
+  MyTextInput
 } from "../../components/FormInput.component";
 import MyModal from "../../components/MyModal.component";
-import { AuthContext } from "../../context/AuthContext.context";
 export interface ILoginModal {
   opened: boolean;
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
@@ -33,12 +29,8 @@ const LoginModal: React.FC<ILoginModal> = ({
   const {
     getInputProps,
     errors,
-    isDirty,
     values,
-    setValues,
     reset,
-    isValid,
-    onSubmit
   } = form;
 
   useEffect(() => {

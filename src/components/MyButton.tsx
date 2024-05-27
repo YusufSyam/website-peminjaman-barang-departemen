@@ -2,7 +2,6 @@ import {
   Button,
   ButtonProps,
   createPolymorphicComponent,
-  useMantineTheme
 } from "@mantine/core";
 import { forwardRef } from "react";
 

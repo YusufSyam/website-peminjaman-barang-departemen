@@ -13,6 +13,10 @@ import { useMutation, useQuery } from "react-query";
 import { IconAddFilled } from "../../../assets/icons/Fluent";
 import { MySearchInput } from "../../../components/FormInput.component";
 import Loading from "../../../components/Loading.component";
+import LoadingModal from "../../../components/LoadingModal.component";
+import WarningModal from "../../../components/WarningModal.component";
+import { AuthContext } from "../../../context/AuthContext.context";
+import { BASE_URL } from "../../../utils/const/api";
 import {
   qfAddItem,
   qfDeleteItem,
@@ -22,10 +26,6 @@ import {
 } from "../../../utils/query/item-query";
 import AddNewCatalogModal from "./AddNewCatalogModal.component";
 import CatalogItem, { ICatalogItem } from "./CatalogItem.component";
-import LoadingModal from "../../../components/LoadingModal.component";
-import { AuthContext } from "../../../context/AuthContext.context";
-import { BASE_URL } from "../../../utils/const/api";
-import WarningModal from "../../../components/WarningModal.component";
 
 export interface ICatalog {}
 
@@ -58,12 +58,7 @@ const Catalog: React.FC<ICatalog> = ({}) => {
   const {
     data,
     isFetching,
-    isLoading,
-    isError,
-    error,
     refetch,
-    isSuccess,
-    isRefetching
   } = useQuery(`fetch-all-items`, qfFetchAllItems, {
     onSuccess(data) {
       setFormattedData(formatCatalogItem(data?.data || []));

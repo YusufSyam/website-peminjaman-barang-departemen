@@ -1,5 +1,4 @@
-import { BASE_URL, getTokenAuthorizationHeader } from "../const/api";
-import { ParseFileBase64 } from "../function/misc.function";
+import { BASE_URL } from "../const/api";
 
 const endpoint = `${BASE_URL}/files`;
 
