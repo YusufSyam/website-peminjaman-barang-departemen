@@ -3,7 +3,6 @@ import {
   Group,
   MediaQuery,
   Pagination,
-  Paper,
   Stack,
   Table,
   Text,
