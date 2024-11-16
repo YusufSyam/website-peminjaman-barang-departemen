@@ -84,3 +84,13 @@ export function calculateTimeGap(detectionDateString: string, detectionTime: num
         return `${selisihHari} hari`;
     }
 }
+
+// Extract waktu
+// 12-09-01 13:00:01 -> 13:00:01
+export function extractTime(date: Date): string {
+  return [
+    date.getHours().toString().padStart(2, '0'),
+    date.getMinutes().toString().padStart(2, '0'),
+    // date.getSeconds().toString().padStart(2, '0'),
+  ].join(':');
+}

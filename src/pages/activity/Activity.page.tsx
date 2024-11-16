@@ -1,10 +1,4 @@
-import {
-  Checkbox,
-  Group,
-  Stack,
-  Text,
-  useMantineTheme
-} from "@mantine/core";
+import { Checkbox, Group, Stack, Text, useMantineTheme } from "@mantine/core";
 import React, { useContext, useEffect, useState } from "react";
 import MainLayout from "../../layouts/MainLayout.layout";
 
@@ -15,14 +9,13 @@ import {
   IconShareWindowsOutline
 } from "../../assets/icons/Fluent";
 import noItem from "../../assets/images/no-item.png";
-import {
-  MySearchInput
-} from "../../components/FormInput.component";
+import { MySearchInput } from "../../components/FormInput.component";
 import LoadingModal from "../../components/LoadingModal.component";
 import WarningModal from "../../components/WarningModal.component";
 import { AuthContext } from "../../context/AuthContext.context";
 import { BASE_URL } from "../../utils/const/api";
 import {
+  extractTime,
   formatDateDetection,
   formatDateNormal
 } from "../../utils/function/date.function";
@@ -36,6 +29,7 @@ import ActivityTableComponent, {
   IFETableHeadingProps,
   IFETableRowColumnProps
 } from "./ActivityTable.component";
+import { staffMap } from "../../utils/const/miscConst";
 
 export interface IActivity {}
 
@@ -51,17 +45,22 @@ export interface IBorrowActivity {
   actualReturnDate?: Date;
   additionalInformation: string;
   roomName?: string;
+  staffName?: string;
 }
 
 function formatLentActivity(beData: any[] = []) {
   const formatted = beData?.map((d) => {
-    const imageLinkSplit = d?.item.itemThumbnail?.split("media\\")
-    const imageLink = imageLinkSplit.length > 1 ? `${BASE_URL}/uploaded-file/${imageLinkSplit[1]}` : ""
+    const imageLinkSplit = d?.item.itemThumbnail?.split("media\\");
+    const imageLink =
+      imageLinkSplit.length > 1
+        ? `${BASE_URL}/uploaded-file/${imageLinkSplit[1]}`
+        : "";
 
     const data: IBorrowActivity = {
       activityType: d?.status == "LENT" ? "borrow" : "return",
       borrowDate: new Date(d?.lendStartTime),
       additionalInformation: d?.description,
+      staffName: d?.staffName,
       supposedReturnDate: new Date(d?.lendEndTime),
       borrower: d?.student.name,
       nim: d?.student.studentId,
@@ -106,7 +105,7 @@ const tableHeadings: IFETableHeadingProps[] = [
     width: "210px"
   },
   {
-    label: "Detail",
+    label: "Detail Waktu",
     sortable: true,
     textAlign: "center",
     cellKey: "timeDetail"
@@ -127,10 +126,7 @@ const tableHeadings: IFETableHeadingProps[] = [
 ];
 
 const Activity: React.FC<IActivity> = ({}) => {
-  const {
-    data,
-    refetch,
-  } = useQuery(`fetch-all-lent`, qfFetchAllLentActivity, {
+  const { data, refetch } = useQuery(`fetch-all-lent`, qfFetchAllLentActivity, {
     onSuccess(data) {
       console.log(data, "dasdasdasd");
       setFormattedData(formatLentActivity(data?.data || []));
@@ -262,10 +258,10 @@ const Activity: React.FC<IActivity> = ({}) => {
           label: data.borrower,
           element: (
             <Stack className="gap-0">
-              <Text className="font-poppins text-lg text-primary-text-500">
+              <Text className="font-poppins text-md text-primary-text-500">
                 {data.borrower}
               </Text>
-              <Text className="font-poppins text-lg text-secondary-text-500">
+              <Text className="font-poppins text-md text-secondary-text-500">
                 ({data?.nim})
               </Text>
             </Stack>
@@ -274,7 +270,7 @@ const Activity: React.FC<IActivity> = ({}) => {
         activity: {
           label: data.activityType,
           element: (
-            <div className="w-full">
+            <Stack className="w-full gap-2">
               <Group
                 className={`${
                   data.activityType == "borrow" ? "bg-red" : "bg-green"
@@ -295,7 +291,13 @@ const Activity: React.FC<IActivity> = ({}) => {
                   {data.activityType == "borrow" ? "Meminjam" : "Mengembalikan"}
                 </Text>
               </Group>
-            </div>
+              {/* <Stack className="gap-0">
+                <Text className="text-red font-bold text-sm">
+                  Dikembalikan Sebelum:
+                </Text>
+                <Text>{formatDateNormal(data.supposedReturnDate || new Date())}</Text>
+              </Stack> */}
+            </Stack>
           )
         },
         timeDetail: {
@@ -309,16 +311,22 @@ const Activity: React.FC<IActivity> = ({}) => {
                 <Text className="text-primary-text">
                   {formatDateNormal(data.borrowDate)}
                 </Text>
+                <Text className="text-secondary-text -mt-1 text-sm font-semibold">
+                  Pukul {extractTime(data.borrowDate)}
+                </Text>
               </Stack>
-              {/* <Divider /> */}
               <Stack className="self-start text-start gap-0">
                 <Text className="font-semibold text-primary-text">
-                  Tempat
+                  Wajib Dikembalikan Sebelum
                 </Text>
                 <Text className="text-primary-text">
-                  {data.roomName}
+                  {formatDateNormal(data.supposedReturnDate || new Date())}
+                </Text>
+                <Text className="text-secondary-text -mt-1 text-sm font-semibold">
+                  Pukul {extractTime(data.supposedReturnDate || new Date())}
                 </Text>
               </Stack>
+              {/* <Divider /> */}
               {/* {data.activityType == "return" && (
                 <>
                   <Divider />
@@ -352,13 +360,20 @@ const Activity: React.FC<IActivity> = ({}) => {
         additionalInformation: {
           label: data.additionalInformation,
           element: (
-            <Stack className="">
-              <Text className="text-primary-text text-justify">
-                {/* <span className="font-semibold">Keterangan Tambahan</span>{" "} */}
-                {data.additionalInformation == ""
-                  ? "Tidak ada keterangan"
-                  : data.additionalInformation}
-              </Text>
+            <Stack className="w-fit mx-auto gap-1">
+              
+              <Stack className="self-start text-start gap-0">
+                <Text className="font-semibold text-primary-text">Tempat</Text>
+                <Text className="text-primary-text">{data.roomName}</Text>
+              </Stack>
+              <Stack className="self-start text-start gap-0">
+                <Text className="font-semibold text-primary-text">Staff</Text>
+                <Text className="text-primary-text">{staffMap?.[data?.staffName || "4"] || "-"}</Text>
+              </Stack>
+              <Stack className="self-start text-start gap-0">
+                <Text className="font-semibold text-primary-text">Catatan</Text>
+                <Text className="text-primary-text w-40 max-w-40 break-words whitespace-normal">{data.additionalInformation}</Text>
+              </Stack>
             </Stack>
             // <div className="w-[200px] bg-green">
             //   <p className="h-[100px] w-[200px] text-primary-text text-justify bg-red break-all">

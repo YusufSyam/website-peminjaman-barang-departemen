@@ -5,6 +5,8 @@ import {
   NumberInputStylesNames,
   PasswordInput,
   PasswordInputProps,
+  Select,
+  SelectProps,
   SelectStylesNames,
   Styles,
   TextInputProps,
@@ -319,6 +321,29 @@ export const MySearchInput = ({
         icon={
           <SearchFilled size={22} color={theme.colors["secondary-text"][7]} />
         }
+        onFocus={(e) => {
+          setIsFocus(true);
+          if (!!onFocus) onFocus(e);
+        }}
+        onBlur={(e) => {
+          setIsFocus(false);
+          if (!!onBlur) onBlur(e);
+        }}
+        {...props}
+      />
+    </>
+  );
+};
+
+
+export const MySelectInput = ({ onFocus, onBlur, ...props }: SelectProps ) => {
+  const [isFocus, setIsFocus] = useState<boolean>(false);
+
+  return (
+    <>
+      <Select
+        className="text-primary-text"
+        styles={{ ...getDefaultStyle(isFocus, !!props.error) }}
         onFocus={(e) => {
           setIsFocus(true);
           if (!!onFocus) onFocus(e);

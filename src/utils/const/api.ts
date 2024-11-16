@@ -1,4 +1,5 @@
-const SERVER_NAME = "http://localhost:7892";
+// const SERVER_NAME = "http://localhost:7892";
+const SERVER_NAME = "http://103.150.93.159:7892";  
 export const BASE_URL = `${SERVER_NAME}/api`;
 
 export function getTokenAuthorizationHeader() {

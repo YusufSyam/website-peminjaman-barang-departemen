@@ -5,6 +5,7 @@ import { UseMutationResult } from "react-query";
 import FotoKTM from "../../../assets/images/ktm.png";
 import {
   MyDateTimePickerInput,
+  MySelectInput,
   MyTextInput
 } from "../../../components/FormInput.component";
 import MyModal from "../../../components/MyModal.component";
@@ -117,6 +118,35 @@ const LentItemModal: React.FC<ILentItemModal> = ({
             required
           />
         </Group>
+        
+        <MySelectInput
+          label="Staff"
+          size="md"
+          placeholder="Pilih Staff yang Memberikan Peminjaman"
+          data={[
+            {
+              // "CLOTHES", "ACCESSORIES", "OTHER"
+              label: "Nasir, S.Sos",
+              value: "1"
+            },
+            {
+              label: "Irma, S.Si",
+              value: "2"
+            },
+            {
+              value: "3",
+              label: "Karmila K, S.Si"
+            },
+            {
+              value: "4",
+              label: "Staff Lain"
+            },
+          ]}
+          {...getInputProps("staffName")}
+          error={errors["staffName" as keyof IEditCatalogItemInterfaces]}
+          required
+          clearable
+        />
         <MyTextInput
           label="Keterangan Tambahan"
           size="md"
@@ -132,6 +162,7 @@ const LentItemModal: React.FC<ILentItemModal> = ({
             values?.itemId == null ||
             values?.lendEndTime == null ||
             values?.lendStartTime == null ||
+            values?.staffName == null ||
             values?.studentId == null
             // values?.description == null ||
             // values?.roomName == null

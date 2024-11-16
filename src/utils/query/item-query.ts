@@ -121,7 +121,8 @@ export async function qfLentItem(values: ILentItem) {
       itemId: values?.itemId,
       studentId: values?.studentId,
       description: values?.description,
-      roomName: values?.roomName
+      roomName: values?.roomName,
+      staffName: values?.staffName,
     })
   });
 

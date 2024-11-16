@@ -3,15 +3,14 @@ import {
   Group,
   MediaQuery,
   Pagination,
+  Paper,
   Stack,
   Table,
   Text,
   useMantineTheme
 } from "@mantine/core";
 import React from "react";
-import {
-  IconCalendarEmptyOutline
-} from "../../assets/icons/Fluent";
+import { IconCalendarEmptyOutline } from "../../assets/icons/Fluent";
 import Loading from "../../components/Loading.component";
 
 export interface ILFPHeaderButton {
@@ -93,10 +92,7 @@ export interface IActiveSort {
   order: "ASC" | "DESC";
 }
 
-export type IActionButtonBgColor =
-  | "red"
-  | "green"
-  | "white";
+export type IActionButtonBgColor = "red" | "green" | "white";
 
 export interface IActivityTableAction {
   label: string;
@@ -116,7 +112,8 @@ export interface IActivityTableAction {
 // Add action color here
 const aciontBtnClsNames: { [x in IActionButtonBgColor]: string } = {
   red: "!bg-red !bg-opacity-20 !text-red",
-  green: "!bg-green !bg-opacity-20 text-green !disabled:bg-secondary !disabled:text-secondary-text",
+  green:
+    "!bg-green !bg-opacity-20 text-green !disabled:bg-secondary !disabled:text-secondary-text",
   white: "!bg-white"
 };
 
@@ -142,7 +139,6 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
 
   const pageAmt = Math.round(tableRows?.length / dataPerPageAmt + 0.4);
 
-
   function handlePageChange(e: number) {
     onPageChange && onPageChange(e);
   }
@@ -154,31 +150,31 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
       <Text className="font-poppins-semibold text-sm text-white" size={16}>
         Halaman {activePage >= pageAmt ? pageAmt : activePage} dari {pageAmt}
       </Text>
-        <Pagination
-          color={"dark-red"}
-          onChange={handlePageChange}
-          total={pageAmt}
-          disabled={pageAmt == 0}
-          withEdges
-          styles={{
-            control: {
-              color: theme.colors["primary-text"][5],
-              borderRadius: "999px",
-              padding: "16px",
-              border: "2px solid #d4d3e7",
-              fontFamily: "poppins",
-              // backgroundColor: theme.colors['white'][5],
-              ":active": {
-                color: theme.colors["white"][5] + " !important"
-              },
-              ":hover": {
-                backgroundColor: theme.colors["light-red"][5] + " !important",
-                border: "2px solid #FFFFFF",
-                color: theme.colors["white"][5]
-              }
+      <Pagination
+        color={"dark-red"}
+        onChange={handlePageChange}
+        total={pageAmt}
+        disabled={pageAmt == 0}
+        withEdges
+        styles={{
+          control: {
+            color: theme.colors["primary-text"][5],
+            borderRadius: "999px",
+            padding: "16px",
+            border: "2px solid #d4d3e7",
+            fontFamily: "poppins",
+            // backgroundColor: theme.colors['white'][5],
+            ":active": {
+              color: theme.colors["white"][5] + " !important"
+            },
+            ":hover": {
+              backgroundColor: theme.colors["light-red"][5] + " !important",
+              border: "2px solid #FFFFFF",
+              color: theme.colors["white"][5]
             }
-          }}
-        />
+          }
+        }}
+      />
     </>
   );
 
@@ -323,16 +319,16 @@ const ActivityTableComponent: React.FC<IActivityTableComponentProps> = ({
                         return (
                           <td
                             key={col.label + "td-key" + e}
-                            className={`text-primary-text-500  text-${
-                              th.textAlign
-                            } fe-table-td ${col?.additionalClass || ""}`}
+                            className={`text-primary-text-500 text-${th.textAlign}  `}
                           >
                             {col.element != null ? (
-                              <Text className="text-[14px]">{col.element}</Text>
+                              <div className="text-[14px] ">
+                                {col.element}
+                              </div>
                             ) : (
-                              <Text className="text-[14px] font-poppins">
+                              <div className="text-[14px] font-poppins">
                                 {col.label}
-                              </Text>
+                              </div>
                             )}
                           </td>
                         );

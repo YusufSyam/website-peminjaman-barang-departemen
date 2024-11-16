@@ -5,12 +5,14 @@ export interface IAddNewCatalogItemInterfaces {
   stock: number;
   description: string;
   image: File;
+  // staffName: "Nasir, S.Sos" | "Irma, S.Si" | "Karmila K, S.Si"
 }
 
 export interface IEditCatalogItemInterfaces {
   name: string;
   stock: number;
   description: string;
+  staffName?: string;
   thumbnail: string;
 }
 
@@ -21,6 +23,7 @@ export interface ILentItem {
   studentId: string;
   description: string;
   roomName: string;
+  staffName?:string;
 }
 
 export const AddNewCatalogItemSchema = yup.object({
@@ -40,6 +43,7 @@ export const LentItemSchema = yup.object({
   roomName: yup.string().required('Input field terlebih dahulu'),
   lendStartTime: yup.number().required("Input field terlebih dahulu"),
   lendEndTime: yup.number().required("Input field terlebih dahulu"),
+  staffName: yup.number().required("Input field terlebih dahulu"),
 });
 
 export const EditCatalogItemSchema = yup.object({
