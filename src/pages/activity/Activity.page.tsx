@@ -172,7 +172,8 @@ const Activity: React.FC<IActivity> = ({}) => {
     let tempActivity = formattedData?.filter(
       (d: IBorrowActivity) =>
         d?.itemName?.toLowerCase()?.includes(lowerQuery) ||
-        d?.nim?.toLowerCase()?.includes(lowerQuery)
+        d?.borrower?.toLowerCase()?.includes(lowerQuery) ||
+        d?.nim?.toLowerCase()?.includes(lowerQuery) 
     );
 
     if (selectedDate != null) {
